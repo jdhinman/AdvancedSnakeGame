@@ -106,14 +106,39 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun togglePause() {
+        _gameState.update { currentState ->
+            if (currentState.isGameOver) {
+                currentState // Can't pause when game is over
+            } else {
+                val newPausedState = !currentState.isPaused
+                if (newPausedState) {
+                    // Pausing the game
+                    gameLoopJob?.cancel()
+                } else {
+                    // Resuming the game
+                    startGameLoop()
+                }
+                currentState.copy(isPaused = newPausedState)
+            }
+        }
+    }
+
     private fun startGameLoop() {
         gameLoopJob = viewModelScope.launch {
             while (true) {
-                val currentScore = _gameState.value.score
-                val gameTickMs = calculateGameSpeed(currentScore)
+                val currentState = _gameState.value
+                
+                // Skip game update if paused or game over
+                if (currentState.isPaused || currentState.isGameOver) {
+                    delay(100) // Small delay to prevent busy-waiting
+                    continue
+                }
+                
+                val gameTickMs = calculateGameSpeed(currentState.score)
                 delay(gameTickMs)
-                _gameState.update { currentState ->
-                    val updatedState = updateGameUseCase(currentState)
+                _gameState.update { state ->
+                    val updatedState = updateGameUseCase(state)
                     if (updatedState.isGameOver) {
                         handleGameOver()
                     }

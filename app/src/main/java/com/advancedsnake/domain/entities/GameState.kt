@@ -6,5 +6,6 @@ data class GameState(
     val boardWidth: Int,
     val boardHeight: Int,
     val score: Int = 0,
-    val isGameOver: Boolean = false
+    val isGameOver: Boolean = false,
+    val isPaused: Boolean = false
 )

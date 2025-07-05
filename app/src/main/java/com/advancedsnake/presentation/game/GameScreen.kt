@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.advancedsnake.R
 import com.advancedsnake.domain.entities.Direction
+import com.advancedsnake.domain.entities.GameSettings
 import com.advancedsnake.domain.entities.GameState
 import com.advancedsnake.domain.entities.Point
 import kotlin.math.abs
@@ -38,6 +39,7 @@ fun GameScreen(
     viewModel: GameViewModel = hiltViewModel()
 ) {
     val gameState by viewModel.gameState.collectAsStateWithLifecycle()
+    val settings by viewModel.currentSettings.collectAsStateWithLifecycle()
     
     Column(
         modifier = Modifier
@@ -51,9 +53,22 @@ fun GameScreen(
             modifier = Modifier.padding(16.dp)
         )
         
+        // Pause/Resume Button
+        if (!gameState.isGameOver) {
+            Button(
+                onClick = { viewModel.togglePause() },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = if (gameState.isPaused) "Resume" else "Pause"
+                )
+            }
+        }
+        
         // Game Board
         GameBoard(
             gameState = gameState,
+            settings = settings,
             onDirectionChange = viewModel::onDirectionChange,
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,6 +119,7 @@ private fun ScoreDisplay(
 @Composable
 private fun GameBoard(
     gameState: GameState,
+    settings: GameSettings,
     onDirectionChange: (Direction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -131,14 +147,17 @@ private fun GameBoard(
                             val currentTime = System.currentTimeMillis()
                             val timeSinceLastChange = currentTime - lastDirectionChangeTime
                             
-                            // Debounce rapid gestures (200ms minimum between direction changes)
-                            if (timeSinceLastChange < 200) return@detectDragGestures
+                            // Dynamic debouncing based on sensitivity (higher sensitivity = faster response)
+                            val debounceTime = (150 / settings.controlSensitivity).toLong().coerceIn(50L, 300L)
+                            if (timeSinceLastChange < debounceTime) return@detectDragGestures
                             
                             val totalDrag = change.position - dragStartPosition
                             val threshold = with(density) { 
-                                // Adaptive threshold based on screen size
+                                // Adaptive threshold based on screen size and sensitivity
                                 val baseThreshold = 60.dp.toPx()
-                                maxOf(baseThreshold, size.width * 0.08f, size.height * 0.06f)
+                                val screenAdaptive = maxOf(baseThreshold, size.width * 0.08f, size.height * 0.06f)
+                                // Apply sensitivity: higher sensitivity = lower threshold (easier to trigger)
+                                screenAdaptive / settings.controlSensitivity
                             }
                             
                             // Dead zone to prevent accidental direction changes
@@ -184,32 +203,38 @@ private fun DrawScope.drawGame(gameState: GameState) {
         size = size
     )
     
-    // Draw grid lines (optional, for better visibility)
-    val gridColor = Color.Gray.copy(alpha = 0.3f)
-    for (x in 0..gameState.boardWidth) {
-        drawLine(
-            color = gridColor,
-            start = Offset(x * cellWidth, 0f),
-            end = Offset(x * cellWidth, size.height),
-            strokeWidth = 1.dp.toPx()
-        )
+    // Draw grid lines (if enabled in settings)
+    if (settings.showGrid) {
+        val gridColor = Color.Gray.copy(alpha = 0.3f)
+        for (x in 0..gameState.boardWidth) {
+            drawLine(
+                color = gridColor,
+                start = Offset(x * cellWidth, 0f),
+                end = Offset(x * cellWidth, size.height),
+                strokeWidth = 1.dp.toPx()
+            )
+        }
+        for (y in 0..gameState.boardHeight) {
+            drawLine(
+                color = gridColor,
+                start = Offset(0f, y * cellHeight),
+                end = Offset(size.width, y * cellHeight),
+                strokeWidth = 1.dp.toPx()
+            )
+        }
     }
-    for (y in 0..gameState.boardHeight) {
-        drawLine(
-            color = gridColor,
-            start = Offset(0f, y * cellHeight),
-            end = Offset(size.width, y * cellHeight),
-            strokeWidth = 1.dp.toPx()
-        )
-    }
+    
+    // Get theme colors
+    val bodyColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
+    val headColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex))
     
     // Draw snake body
     gameState.snake.body.forEach { bodyPart ->
-        drawSnakeSegment(bodyPart, cellWidth, cellHeight, Color(0xFF4CAF50))
+        drawSnakeSegment(bodyPart, cellWidth, cellHeight, bodyColor)
     }
     
-    // Draw snake head with enhanced visuals
-    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight)
+    // Draw snake head with enhanced visuals and theme color
+    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight, headColor)
     
     // Draw food
     drawFood(gameState.food.position, cellWidth, cellHeight)
@@ -219,7 +244,8 @@ private fun DrawScope.drawSnakeHead(
     position: Point,
     direction: Direction,
     cellWidth: Float,
-    cellHeight: Float
+    cellHeight: Float,
+    headColor: Color = Color(0xFF2E7D32)
 ) {
     val padding = 2.dp.toPx()
     val headSize = Size(cellWidth - 2 * padding, cellHeight - 2 * padding)
@@ -228,9 +254,9 @@ private fun DrawScope.drawSnakeHead(
         position.y * cellHeight + padding
     )
     
-    // Draw head background (darker green)
+    // Draw head background with theme color
     drawRect(
-        color = Color(0xFF2E7D32),
+        color = headColor,
         topLeft = headTopLeft,
         size = headSize
     )
