@@ -22,6 +22,56 @@
 
 ## Build Fixes History
 
+### Improvement #4: Enhanced Swipe Controls and Progressive Speed System
+**Date:** 2025-01-05 15:45 UTC  
+**Commit:** 8a9d707  
+
+**Issues Fixed:**
+- Unreliable swipe detection requiring multiple attempts
+- Game starting too fast (150ms) for beginners
+- No difficulty progression or speed scaling
+
+**Root Cause:**  
+1. **Swipe Detection**: Used continuous `onDrag` callback with threshold applied to individual drag deltas rather than cumulative distance, causing multiple rapid triggers and poor gesture recognition
+2. **Game Speed**: Fixed 150ms timing with no progression made game too difficult initially and provided no challenge scaling
+
+**Solution:**  
+**Swipe Controls Enhancement:**
+- Replaced delta-based detection with cumulative drag distance tracking
+- Added proper gesture lifecycle with `onDragStart`, `onDragEnd` state management
+- Implemented 200ms debouncing to prevent rapid-fire direction changes
+- Added adaptive thresholds based on screen size (8% width, 6% height minimum)
+- Included 20dp dead zone to prevent accidental direction changes
+- Added directional bias (60% secondary threshold) for clearer gesture recognition
+
+**Progressive Speed System:**
+- Changed initial speed from 150ms to 350ms (beginner-friendly)
+- Implemented speed progression: decreases by 15ms every 3 points scored
+- Added minimum speed cap at 120ms to maintain playability
+- Enhanced ViewModel with direction change validation and debouncing
+
+**Files Modified:**
+- `app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt` (lines 112-171)
+- `app/src/main/java/com/advancedsnake/presentation/game/GameViewModel.kt` (lines 38-93)
+
+**Technical Implementation:**
+```kotlin
+// Improved gesture detection with state management
+var dragStartPosition by remember { mutableStateOf(Offset.Zero) }
+var hasDirectionChanged by remember { mutableStateOf(false) }
+
+// Dynamic speed calculation
+private fun calculateGameSpeed(score: Int): Long {
+    val baseSpeed = INITIAL_GAME_SPEED // 350ms
+    val speedDecrease = (score / 3) * SPEED_DECREASE_PER_LEVEL // 15ms
+    return (baseSpeed - speedDecrease).coerceAtLeast(MIN_GAME_SPEED) // 120ms min
+}
+```
+
+**Result:** Responsive, reliable swipe controls with appropriate difficulty progression from beginner-friendly to challenging gameplay.
+
+---
+
 ### Fix #3: Missing lifecycle-runtime-compose Dependency
 **Date:** 2025-01-05 14:30 UTC  
 **Commit:** 143b332  
@@ -162,5 +212,5 @@ rm app/src/main/res/drawable/ic_launcher_vector.xml
 
 ---
 
-*Last Updated: 2025-01-05 14:35 UTC*  
-*Document Version: 1.0*
+*Last Updated: 2025-01-05 15:50 UTC*  
+*Document Version: 1.1*
