@@ -7,7 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.advancedsnake.presentation.game.GameScreen
+import com.advancedsnake.presentation.leaderboard.LeaderboardScreen
 import com.advancedsnake.presentation.menu.MenuScreen
+import com.advancedsnake.presentation.settings.SettingsScreen
 import com.advancedsnake.presentation.theme.AdvancedSnakeGameTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +26,12 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("game") {
                         GameScreen(navController)
+                    }
+                    composable("leaderboard") {
+                        LeaderboardScreen(navController)
+                    }
+                    composable("settings") {
+                        SettingsScreen(navController)
                     }
                 }
             }

@@ -31,11 +31,11 @@ fun MenuScreen(navController: NavController) {
             Text(stringResource(id = R.string.play))
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { /* TODO: Implement Leaderboard */ }) {
+        Button(onClick = { navController.navigate("leaderboard") }) {
             Text(stringResource(id = R.string.leaderboard))
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { /* TODO: Implement Settings */ }) {
+        Button(onClick = { navController.navigate("settings") }) {
             Text(stringResource(id = R.string.settings))
         }
     }

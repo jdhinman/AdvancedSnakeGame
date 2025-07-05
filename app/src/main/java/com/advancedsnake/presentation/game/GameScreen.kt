@@ -208,11 +208,135 @@ private fun DrawScope.drawGame(gameState: GameState) {
         drawSnakeSegment(bodyPart, cellWidth, cellHeight, Color(0xFF4CAF50))
     }
     
-    // Draw snake head
-    drawSnakeSegment(gameState.snake.head, cellWidth, cellHeight, Color(0xFF2E7D32))
+    // Draw snake head with enhanced visuals
+    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight)
     
     // Draw food
     drawFood(gameState.food.position, cellWidth, cellHeight)
+}
+
+private fun DrawScope.drawSnakeHead(
+    position: Point,
+    direction: Direction,
+    cellWidth: Float,
+    cellHeight: Float
+) {
+    val padding = 2.dp.toPx()
+    val headSize = Size(cellWidth - 2 * padding, cellHeight - 2 * padding)
+    val headTopLeft = Offset(
+        position.x * cellWidth + padding,
+        position.y * cellHeight + padding
+    )
+    
+    // Draw head background (darker green)
+    drawRect(
+        color = Color(0xFF2E7D32),
+        topLeft = headTopLeft,
+        size = headSize
+    )
+    
+    // Draw eyes
+    val eyeRadius = (cellWidth * 0.08f).coerceAtLeast(2f)
+    val eyeColor = Color.White
+    val pupilColor = Color.Black
+    val pupilRadius = eyeRadius * 0.6f
+    
+    // Calculate eye positions based on direction
+    val (leftEyeOffset, rightEyeOffset) = when (direction) {
+        Direction.UP -> {
+            val eyeY = headTopLeft.y + headSize.height * 0.3f
+            Pair(
+                Offset(headTopLeft.x + headSize.width * 0.3f, eyeY),
+                Offset(headTopLeft.x + headSize.width * 0.7f, eyeY)
+            )
+        }
+        Direction.DOWN -> {
+            val eyeY = headTopLeft.y + headSize.height * 0.7f
+            Pair(
+                Offset(headTopLeft.x + headSize.width * 0.3f, eyeY),
+                Offset(headTopLeft.x + headSize.width * 0.7f, eyeY)
+            )
+        }
+        Direction.LEFT -> {
+            val eyeX = headTopLeft.x + headSize.width * 0.3f
+            Pair(
+                Offset(eyeX, headTopLeft.y + headSize.height * 0.3f),
+                Offset(eyeX, headTopLeft.y + headSize.height * 0.7f)
+            )
+        }
+        Direction.RIGHT -> {
+            val eyeX = headTopLeft.x + headSize.width * 0.7f
+            Pair(
+                Offset(eyeX, headTopLeft.y + headSize.height * 0.3f),
+                Offset(eyeX, headTopLeft.y + headSize.height * 0.7f)
+            )
+        }
+    }
+    
+    // Draw eyes (white circles with black pupils)
+    drawCircle(color = eyeColor, radius = eyeRadius, center = leftEyeOffset)
+    drawCircle(color = pupilColor, radius = pupilRadius, center = leftEyeOffset)
+    drawCircle(color = eyeColor, radius = eyeRadius, center = rightEyeOffset)
+    drawCircle(color = pupilColor, radius = pupilRadius, center = rightEyeOffset)
+    
+    // Draw directional indicator (small triangle pointing in movement direction)
+    val indicatorColor = Color(0xFF1B5E20)
+    val indicatorSize = cellWidth * 0.15f
+    
+    when (direction) {
+        Direction.UP -> {
+            val tipX = headTopLeft.x + headSize.width * 0.5f
+            val tipY = headTopLeft.y + padding
+            drawPath(
+                path = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(tipX, tipY)
+                    lineTo(tipX - indicatorSize, tipY + indicatorSize)
+                    lineTo(tipX + indicatorSize, tipY + indicatorSize)
+                    close()
+                },
+                color = indicatorColor
+            )
+        }
+        Direction.DOWN -> {
+            val tipX = headTopLeft.x + headSize.width * 0.5f
+            val tipY = headTopLeft.y + headSize.height - padding
+            drawPath(
+                path = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(tipX, tipY)
+                    lineTo(tipX - indicatorSize, tipY - indicatorSize)
+                    lineTo(tipX + indicatorSize, tipY - indicatorSize)
+                    close()
+                },
+                color = indicatorColor
+            )
+        }
+        Direction.LEFT -> {
+            val tipX = headTopLeft.x + padding
+            val tipY = headTopLeft.y + headSize.height * 0.5f
+            drawPath(
+                path = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(tipX, tipY)
+                    lineTo(tipX + indicatorSize, tipY - indicatorSize)
+                    lineTo(tipX + indicatorSize, tipY + indicatorSize)
+                    close()
+                },
+                color = indicatorColor
+            )
+        }
+        Direction.RIGHT -> {
+            val tipX = headTopLeft.x + headSize.width - padding
+            val tipY = headTopLeft.y + headSize.height * 0.5f
+            drawPath(
+                path = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(tipX, tipY)
+                    lineTo(tipX - indicatorSize, tipY - indicatorSize)
+                    lineTo(tipX - indicatorSize, tipY + indicatorSize)
+                    close()
+                },
+                color = indicatorColor
+            )
+        }
+    }
 }
 
 private fun DrawScope.drawSnakeSegment(
