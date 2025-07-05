@@ -22,6 +22,88 @@
 
 ## Build Fixes History
 
+### Major Feature Update #5: Complete Leaderboard, Settings & Enhanced Visuals
+**Date:** 2025-01-05 17:30 UTC  
+**Commit:** 28f01ff  
+
+**Features Implemented:**
+- Comprehensive leaderboard system with Room database
+- Full settings menu with game customization options
+- Enhanced snake head with eyes and directional indicators
+- Complete navigation system integration
+
+**🎯 Leaderboard System:**
+- **Room Database**: ScoreEntity, ScoreDao, AppDatabase with proper migration support
+- **Data Storage**: Player name, score, snake length, game duration, speed level, timestamp
+- **Statistics**: Games played, average score, highest score with real-time updates
+- **UI Features**: Podium-style top 3 ranking, relative time display, game statistics card
+- **Management**: Clear all scores with confirmation, empty state with motivation
+
+**⚙️ Settings System:**
+- **Game Speed**: Beginner (500ms), Normal (350ms), Expert (250ms) with dynamic progression
+- **Board Size**: Small (15×20), Medium (20×30), Large (25×35) tiles
+- **Control Sensitivity**: Adjustable slider affecting swipe gesture responsiveness  
+- **Audio**: Sound effects and vibration toggles
+- **Visual**: Snake color themes (Classic, Neon, Fire, Purple, Rainbow) with previews
+- **Display**: Grid toggle, keep screen on, player name customization
+- **Data**: DataStore-based persistence with reset to defaults option
+
+**🐍 Enhanced Snake Head:**
+- **Directional Eyes**: White eyes with black pupils positioned based on movement direction
+- **Movement Indicator**: Triangular arrow showing current direction
+- **Visual Distinction**: Darker green color (#2E7D32) vs body (#4CAF50)
+- **Responsive Design**: Scales properly with different board sizes and screen densities
+
+**🧭 Navigation Integration:**
+- **Routes**: Added "leaderboard" and "settings" to MainActivity NavHost
+- **Menu**: Replaced placeholder TODOs with functional navigation calls
+- **Back Navigation**: Proper back button handling in all new screens
+- **State Management**: Reactive UI updates with StateFlow and Compose
+
+**🏗️ Architecture:**
+- **Clean Architecture**: Maintained separation with new repositories, use cases, entities
+- **Dependency Injection**: Hilt integration for all new components
+- **Database**: Room database with proper DAO patterns and entity relationships
+- **Settings**: DataStore preferences for type-safe settings persistence
+- **Game Integration**: Settings automatically affect game speed, board size, controls
+
+**Files Created:**
+```
+data/local/dao/ScoreDao.kt - Database operations
+data/local/database/AppDatabase.kt - Room database setup  
+data/local/entities/ScoreEntity.kt - Score data model
+data/repositories/LeaderboardRepositoryImpl.kt - Score persistence
+data/repositories/SettingsRepositoryImpl.kt - Settings persistence
+domain/entities/GameSettings.kt - Settings data models with enums
+domain/entities/Score.kt - Domain score model with formatting
+domain/repositories/LeaderboardRepository.kt - Repository interface
+domain/repositories/SettingsRepository.kt - Settings interface
+domain/usecases/GetLeaderboardUseCase.kt - Score retrieval logic
+domain/usecases/SaveScoreUseCase.kt - Score saving logic
+presentation/leaderboard/LeaderboardScreen.kt - Leaderboard UI
+presentation/leaderboard/LeaderboardViewModel.kt - Leaderboard state
+presentation/settings/SettingsScreen.kt - Settings UI with categories
+presentation/settings/SettingsViewModel.kt - Settings state management
+```
+
+**Files Modified:**
+- `di/GameModule.kt`: Added database and repository bindings
+- `presentation/MainActivity.kt`: Added leaderboard and settings routes
+- `presentation/menu/MenuScreen.kt`: Replaced placeholder buttons with navigation
+- `presentation/game/GameViewModel.kt`: Integrated settings and leaderboard systems
+- `presentation/game/GameScreen.kt`: Enhanced snake head rendering with eyes/indicators
+
+**Integration Benefits:**
+- **Persistent Progression**: Scores survive app restarts and provide long-term engagement
+- **Customizable Experience**: Players can adjust difficulty, visuals, and controls to preference
+- **Visual Clarity**: Enhanced snake head improves gameplay readability and direction awareness
+- **Mobile Optimization**: Settings include mobile-specific options like keep screen on and vibration
+- **Scalable Architecture**: Clean foundation for future feature additions
+
+**Result:** Transformed basic snake game into feature-complete mobile game with professional-grade leaderboard system, comprehensive settings, and enhanced visual design following modern Android development best practices.
+
+---
+
 ### Improvement #4: Enhanced Swipe Controls and Progressive Speed System
 **Date:** 2025-01-05 15:45 UTC  
 **Commit:** 8a9d707  
@@ -212,5 +294,5 @@ rm app/src/main/res/drawable/ic_launcher_vector.xml
 
 ---
 
-*Last Updated: 2025-01-05 15:50 UTC*  
-*Document Version: 1.1*
+*Last Updated: 2025-01-05 17:35 UTC*  
+*Document Version: 2.0*
