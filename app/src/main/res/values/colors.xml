@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material Design 3 color scheme -->
+    <color name="md_theme_light_primary">#2E7D32</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#A8F5A3</color>
+    <color name="md_theme_light_onPrimaryContainer">#00210A</color>
+    <color name="md_theme_light_secondary">#526350</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#D4E8D0</color>
+    <color name="md_theme_light_onSecondaryContainer">#101F10</color>
+    <color name="md_theme_light_tertiary">#39656B</color>
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="md_theme_light_tertiaryContainer">#BCEBF2</color>
+    <color name="md_theme_light_onTertiaryContainer">#001F23</color>
+    <color name="md_theme_light_error">#BA1A1A</color>
+    <color name="md_theme_light_errorContainer">#FFDAD6</color>
+    <color name="md_theme_light_onError">#FFFFFF</color>
+    <color name="md_theme_light_onErrorContainer">#410002</color>
+    <color name="md_theme_light_background">#F8FDF4</color>
+    <color name="md_theme_light_onBackground">#191D16</color>
+    <color name="md_theme_light_surface">#F8FDF4</color>
+    <color name="md_theme_light_onSurface">#191D16</color>
+    <color name="md_theme_light_surfaceVariant">#DDE5DA</color>
+    <color name="md_theme_light_onSurfaceVariant">#414941</color>
+    <color name="md_theme_light_outline">#717971</color>
+    <color name="md_theme_light_outlineVariant">#C1C9BE</color>
+    <color name="md_theme_light_inverseSurface">#2E322B</color>
+    <color name="md_theme_light_inverseOnSurface">#EFF2E9</color>
+    <color name="md_theme_light_inversePrimary">#8DD888</color>
+    
+    <!-- Game specific colors -->
+    <color name="snake_body">#4CAF50</color>
+    <color name="snake_head">#2E7D32</color>
+    <color name="food_color">#F44336</color>
+    <color name="game_background">#000000</color>
+    <color name="game_grid">#333333</color>
+</resources>

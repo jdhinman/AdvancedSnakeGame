@@ -1,0 +1,36 @@
+buildscript {
+    ext {
+        // Version definitions optimized for Termux
+        kotlin_version = '1.9.10'
+        compose_version = '1.5.4'
+        compose_compiler_version = '1.5.4'
+        hilt_version = '2.48'
+        android_gradle_plugin_version = '8.1.2'
+        room_version = '2.5.0'
+        coroutines_version = '1.7.3'
+    }
+    
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    
+    dependencies {
+        classpath "com.android.tools.build:gradle:$android_gradle_plugin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+    }
+}
+
+plugins {
+    id 'com.android.application' version '8.1.2' apply false
+    id 'com.android.library' version '8.1.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.10' apply false
+    id 'com.google.dagger.hilt.android' version '2.48' apply false
+}
+
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
