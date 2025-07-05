@@ -35,9 +35,31 @@ class GameViewModel @Inject constructor(
         startGameLoop()
     }
 
+    private var lastDirectionChangeTime = 0L
+    
     fun onDirectionChange(newDirection: Direction) {
+        val currentTime = System.currentTimeMillis()
+        val timeSinceLastChange = currentTime - lastDirectionChangeTime
+        
+        // Debounce rapid direction changes at ViewModel level
+        if (timeSinceLastChange < 150) return
+        
         _gameState.update { currentState ->
-            changeDirectionUseCase(currentState, newDirection)
+            // Prevent invalid direction changes (reverse direction into snake body)
+            val currentDirection = currentState.snake.direction
+            val isValidDirection = when (newDirection) {
+                Direction.UP -> currentDirection != Direction.DOWN
+                Direction.DOWN -> currentDirection != Direction.UP
+                Direction.LEFT -> currentDirection != Direction.RIGHT
+                Direction.RIGHT -> currentDirection != Direction.LEFT
+            }
+            
+            if (isValidDirection) {
+                lastDirectionChangeTime = currentTime
+                changeDirectionUseCase(currentState, newDirection)
+            } else {
+                currentState
+            }
         }
     }
 
@@ -53,7 +75,9 @@ class GameViewModel @Inject constructor(
     private fun startGameLoop() {
         gameLoopJob = viewModelScope.launch {
             while (true) {
-                delay(GAME_TICK_MS)
+                val currentScore = _gameState.value.score
+                val gameTickMs = calculateGameSpeed(currentScore)
+                delay(gameTickMs)
                 _gameState.update { currentState ->
                     val updatedState = updateGameUseCase(currentState)
                     if (updatedState.isGameOver) {
@@ -63,6 +87,16 @@ class GameViewModel @Inject constructor(
                 }
             }
         }
+    }
+    
+    private fun calculateGameSpeed(score: Int): Long {
+        // Start at 350ms (beginner-friendly), decrease by 15ms every 3 points
+        val baseSpeed = INITIAL_GAME_SPEED
+        val speedDecrease = (score / 3) * SPEED_DECREASE_PER_LEVEL
+        val currentSpeed = baseSpeed - speedDecrease
+        
+        // Cap minimum speed to prevent game becoming unplayable
+        return currentSpeed.coerceAtLeast(MIN_GAME_SPEED)
     }
 
     private fun handleGameOver() {
@@ -75,6 +109,8 @@ class GameViewModel @Inject constructor(
     companion object {
         private const val BOARD_WIDTH = 20
         private const val BOARD_HEIGHT = 30
-        private const val GAME_TICK_MS = 150L
+        private const val INITIAL_GAME_SPEED = 350L  // Start slower (beginner-friendly)
+        private const val SPEED_DECREASE_PER_LEVEL = 15L  // Speed up by 15ms every 3 points
+        private const val MIN_GAME_SPEED = 120L  // Minimum speed cap (challenging but playable)
     }
 }

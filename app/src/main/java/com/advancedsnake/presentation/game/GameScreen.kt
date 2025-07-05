@@ -109,32 +109,60 @@ private fun GameBoard(
 ) {
     val density = LocalDensity.current
     
+    var dragStartPosition by remember { mutableStateOf(Offset.Zero) }
+    var hasDirectionChanged by remember { mutableStateOf(false) }
+    var lastDirectionChangeTime by remember { mutableStateOf(0L) }
+    
     Canvas(
         modifier = modifier
             .aspectRatio(gameState.boardWidth.toFloat() / gameState.boardHeight.toFloat())
             .clip(RoundedCornerShape(8.dp))
             .pointerInput(Unit) {
                 detectDragGestures(
-                    onDragEnd = { },
-                    onDrag = { _, dragAmount ->
-                        val threshold = with(density) { 50.dp.toPx() }
-                        
-                        if (abs(dragAmount.x) > abs(dragAmount.y)) {
-                            // Horizontal swipe
-                            if (abs(dragAmount.x) > threshold) {
-                                if (dragAmount.x > 0) {
-                                    onDirectionChange(Direction.RIGHT)
-                                } else {
-                                    onDirectionChange(Direction.LEFT)
-                                }
+                    onDragStart = { offset ->
+                        dragStartPosition = offset
+                        hasDirectionChanged = false
+                    },
+                    onDragEnd = {
+                        hasDirectionChanged = false
+                    },
+                    onDrag = { change, _ ->
+                        if (!hasDirectionChanged) {
+                            val currentTime = System.currentTimeMillis()
+                            val timeSinceLastChange = currentTime - lastDirectionChangeTime
+                            
+                            // Debounce rapid gestures (200ms minimum between direction changes)
+                            if (timeSinceLastChange < 200) return@detectDragGestures
+                            
+                            val totalDrag = change.position - dragStartPosition
+                            val threshold = with(density) { 
+                                // Adaptive threshold based on screen size
+                                val baseThreshold = 60.dp.toPx()
+                                maxOf(baseThreshold, size.width * 0.08f, size.height * 0.06f)
                             }
-                        } else {
-                            // Vertical swipe
-                            if (abs(dragAmount.y) > threshold) {
-                                if (dragAmount.y > 0) {
-                                    onDirectionChange(Direction.DOWN)
-                                } else {
-                                    onDirectionChange(Direction.UP)
+                            
+                            // Dead zone to prevent accidental direction changes
+                            val deadZone = with(density) { 20.dp.toPx() }
+                            
+                            if (abs(totalDrag.x) > deadZone || abs(totalDrag.y) > deadZone) {
+                                // Determine primary direction with bias towards intended direction
+                                val primaryAxisThreshold = threshold
+                                val secondaryAxisThreshold = threshold * 0.6f
+                                
+                                if (abs(totalDrag.x) > primaryAxisThreshold && 
+                                    abs(totalDrag.x) > abs(totalDrag.y) + secondaryAxisThreshold) {
+                                    // Clear horizontal gesture
+                                    val direction = if (totalDrag.x > 0) Direction.RIGHT else Direction.LEFT
+                                    onDirectionChange(direction)
+                                    hasDirectionChanged = true
+                                    lastDirectionChangeTime = currentTime
+                                } else if (abs(totalDrag.y) > primaryAxisThreshold && 
+                                           abs(totalDrag.y) > abs(totalDrag.x) + secondaryAxisThreshold) {
+                                    // Clear vertical gesture
+                                    val direction = if (totalDrag.y > 0) Direction.DOWN else Direction.UP
+                                    onDirectionChange(direction)
+                                    hasDirectionChanged = true
+                                    lastDirectionChangeTime = currentTime
                                 }
                             }
                         }
