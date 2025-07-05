@@ -22,6 +22,72 @@
 
 ## Build Fixes History
 
+### Fix #10: Kotlin Variable Scope Error in Compose Canvas
+**Date:** 2025-01-05 23:55 UTC  
+**Commit:** 5599869  
+
+**Error:**
+```
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:207:9 Unresolved reference: settings
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:228:61 Unresolved reference: settings
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:229:61 Unresolved reference: settings
+```
+
+**Root Cause:**  
+**Variable Scope Issue in Compose Canvas** - When implementing settings integration for game visuals, I referenced `settings` parameter inside the Canvas drawing scope where it wasn't accessible. In Jetpack Compose, Canvas content is executed in a DrawScope, which has limited access to variables from the enclosing Composable scope.
+
+**Technical Details:**
+- **Canvas DrawScope Isolation**: Canvas drawing operations run in a restricted scope
+- **Variable Capture**: Compose Canvas can't directly access all function parameters
+- **Compilation Stage**: Kotlin compiler couldn't resolve `settings` references in DrawScope context
+
+**Solution:**  
+**Extract Variables Before Canvas Block** - Pre-calculate needed values in Composable scope:
+
+**GameScreen.kt changes:**
+```kotlin
+// BEFORE: Trying to access settings inside Canvas (fails)
+Canvas(modifier = modifier) {
+    if (settings.showGrid) { ... }  // ❌ Unresolved reference
+    val bodyColor = Color(parseColor(settings.snakeTheme.bodyColorHex))  // ❌ Error
+}
+
+// AFTER: Extract values before Canvas (works)
+val showGrid = settings.showGrid
+val bodyColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
+val headColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex))
+
+Canvas(modifier = modifier) {
+    if (showGrid) { ... }  // ✅ Works
+    // Use bodyColor and headColor variables
+}
+```
+
+**Files Modified:**
+- `app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt` (lines 132-135, 212, 232-234)
+
+**Technical Pattern:**
+- **Variable Extraction**: Pre-compute values that Canvas needs from external scope
+- **Scope Separation**: Keep Canvas drawing logic isolated from external parameters
+- **Performance Benefit**: Avoids repeated property access during drawing operations
+
+**Prevention Strategies:**
+1. **Pre-extract Canvas Variables**: Always extract needed values before Canvas block
+2. **Scope Awareness**: Remember Canvas DrawScope has limited variable access
+3. **Compose Patterns**: Follow Compose best practices for Canvas integration
+4. **Testing**: Test compilation locally before pushing complex Canvas changes
+
+**Compose-Specific Notes:**
+- Canvas DrawScope is optimized for drawing performance with restricted access
+- State and parameter access should happen in Composable scope, not DrawScope
+- Extract complex calculations before Canvas to improve performance
+- This pattern is common when integrating settings/themes with Canvas drawing
+
+**Related Fix:** This issue was introduced while implementing Fix #2 (snake theme rendering) and Fix #3 (grid display setting), demonstrating the importance of understanding Compose scope limitations.
+
+---
+
 ### Fix #9: Gradle Build Cache Invalidation - Force Recompilation
 **Date:** 2025-01-05 23:45 UTC  
 **Commit:** 57aba9c  
