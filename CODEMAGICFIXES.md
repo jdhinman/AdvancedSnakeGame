@@ -86,6 +86,8 @@ Canvas(modifier = modifier) {
 
 **Related Fix:** This issue was introduced while implementing Fix #2 (snake theme rendering) and Fix #3 (grid display setting), demonstrating the importance of understanding Compose scope limitations.
 
+**Cache Issue Update:** This fix suffered from persistent Codemagic cache (similar to Fix #9). Despite being correctly implemented and pushed to remote repository, Codemagic continued building the old cached version. Required cache-busting variable renames in commit e509f9c: `showGrid → isGridVisible`, `bodyColor → snakeBodyColor`, `headColor → snakeHeadColor`.
+
 ---
 
 ### Fix #9: Gradle Build Cache Invalidation - Force Recompilation
@@ -157,6 +159,8 @@ override suspend fun clearAllScores() = withContext(Dispatchers.IO) {
 - Monitor build task status for unexpected "UP-TO-DATE" compilation tasks
 
 **Related Fix:** This issue occurred after Fix #8 repository changes, highlighting the importance of cache awareness in CI/CD pipelines.
+
+**Cache Pattern Recognition:** This issue has now occurred **TWICE** (Fix #8→9, Fix #10→cache-bust). Codemagic shows persistent cache behavior that requires proactive cache-busting for major code changes. **Pattern Established**: After significant architectural changes, monitor for "UP-TO-DATE" compilation tasks and apply cache-busting techniques preemptively.
 
 ---
 
@@ -618,6 +622,7 @@ rm app/src/main/res/drawable/ic_launcher_vector.xml
 5. **Resource Management:** Disable unnecessary build features (like vectorDrawables) when not needed
 6. **Cache Management:** Monitor for "UP-TO-DATE" tasks and use cache-busting techniques when builds don't reflect code changes
 7. **Remote Verification:** Always verify that fixes are actually in the remote repository before assuming CI/CD issues
+8. **Proactive Cache-Busting:** After major architectural changes, apply cache-busting techniques preemptively rather than reactively
 
 ---
 
