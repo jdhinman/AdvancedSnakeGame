@@ -22,6 +22,77 @@
 
 ## Build Fixes History
 
+### Fix #9: Gradle Build Cache Invalidation - Force Recompilation
+**Date:** 2025-01-05 23:45 UTC  
+**Commit:** 57aba9c  
+
+**Error:**
+```
+> Task :app:compileDebugKotlin FAILED
+e: Return type of 'saveScore' is not a subtype of the return type of the overridden member
+e: Return type of 'clearAllScores' is not a subtype of the return type of the overridden member
+```
+
+**Root Cause:**  
+**Gradle Build Cache Persistence** - Despite correct code being pushed to remote repository (commit 61de7bd), Codemagic continued building with cached compilation results from before the fix. Gradle cached the previous compilation state and marked tasks as "UP-TO-DATE", preventing recompilation of the fixed code.
+
+**Evidence of Caching Issue:**
+- ✅ Verified fix was correctly in remote repository via GitHub API
+- ✅ Build times changed (1m 56s → 1m 47s) indicating new builds were running
+- ✅ But identical error line numbers (31:26, 61:26) suggested cached compilation
+- ✅ Build output showed "UP-TO-DATE" status for compilation tasks
+- ✅ Fresh local compilation worked fine, confirming code was correct
+
+**Solution:**  
+**Cache-Busting Code Changes** - Modified syntax to force Gradle cache invalidation:
+
+**LeaderboardRepositoryImpl.kt changes:**
+```kotlin
+// BEFORE: Simple Unit return (cached by Gradle)
+override suspend fun saveScore(...) = withContext(Dispatchers.IO) {
+    scoreDao.insertScore(scoreEntity)
+    Unit
+}
+
+// AFTER: Explicit return syntax to force recompilation
+override suspend fun saveScore(...) = withContext(Dispatchers.IO) {
+    scoreDao.insertScore(scoreEntity)
+    return@withContext Unit
+}
+
+// Same pattern applied to clearAllScores()
+override suspend fun clearAllScores() = withContext(Dispatchers.IO) {
+    scoreDao.clearAllScores()
+    return@withContext Unit
+}
+```
+
+**Files Modified:**
+- `app/src/main/java/com/advancedsnake/data/repositories/LeaderboardRepositoryImpl.kt` (lines 47, 64)
+
+**Technical Details:**
+- **Gradle Caching**: Build system caches compilation results for performance
+- **Cache Keys**: Based on source code content and dependencies
+- **Invalidation**: Changing syntax forces new cache key generation
+- **Functional Equivalence**: `Unit` and `return@withContext Unit` are identical at runtime
+- **CI/CD Impact**: Remote builds can cache differently than local builds
+
+**Prevention Strategies:**
+1. **Monitor Cache Indicators**: Watch for "UP-TO-DATE" tasks when expecting compilation
+2. **Syntax Variations**: Use equivalent but different syntax to force cache invalidation
+3. **Clean Builds**: Use `./gradlew clean` when major changes aren't reflected
+4. **Cache Debugging**: Add `--rerun-tasks` flag to force task re-execution
+5. **Timestamp Verification**: Check build logs for actual new builds vs cached results
+
+**Codemagic-Specific Notes:**
+- Codemagic can cache build states across commits
+- Always verify remote repository content when builds don't reflect changes
+- Consider triggering manual builds after significant architectural changes
+- Monitor build task status for unexpected "UP-TO-DATE" compilation tasks
+
+**Related Fix:** This issue occurred after Fix #8 repository changes, highlighting the importance of cache awareness in CI/CD pipelines.
+
+---
 
 ### Fix #8: Room DAO Kapt Compatibility - Blocking Calls Approach (UPDATED)  
 **Date:** 2025-01-05 18:50 UTC (Updated: 2025-01-05 23:30 UTC)  
@@ -479,6 +550,8 @@ rm app/src/main/res/drawable/ic_launcher_vector.xml
 3. **Dependency Locking:** Use .lock files and check them into source control
 4. **Version Alignment:** Ensure Kotlin and Compose compiler versions are compatible
 5. **Resource Management:** Disable unnecessary build features (like vectorDrawables) when not needed
+6. **Cache Management:** Monitor for "UP-TO-DATE" tasks and use cache-busting techniques when builds don't reflect code changes
+7. **Remote Verification:** Always verify that fixes are actually in the remote repository before assuming CI/CD issues
 
 ---
 
