@@ -22,9 +22,10 @@
 
 ## Build Fixes History
 
-### Fix #8: Room DAO Kapt Compatibility - Blocking Calls Approach  
-**Date:** 2025-01-05 18:50 UTC  
-**Commit:** 6bfb08a  
+
+### Fix #8: Room DAO Kapt Compatibility - Blocking Calls Approach (UPDATED)  
+**Date:** 2025-01-05 18:50 UTC (Updated: 2025-01-05 23:30 UTC)  
+**Commit:** 6bfb08a (Updated with additional repository fixes)  
 
 **Error:**
 ```
@@ -34,11 +35,20 @@ kotlin.coroutines.Continuation $completion
 error: Not sure how to handle insert method's return type.
 ```
 
+**Follow-up Error (after initial DAO fix):**
+```
+> Task :app:compileDebugKotlin FAILED
+e: Return type of 'saveScore' is not a subtype of the return type of the overridden member 'public abstract suspend fun saveScore(...): Unit
+e: Return type of 'clearAllScores' is not a subtype of the return type of the overridden member 'public abstract suspend fun clearAllScores(): Unit
+```
+
 **Root Cause:**  
 Room 2.5.0 with Kotlin 1.9.10 and Kapt annotation processor has compatibility issues with suspend functions in DAO interfaces. The Kapt processor was unable to properly handle the coroutines continuation parameters generated for suspend functions, despite using COALESCE and explicit return types.
 
 **Solution:**  
-Converted all problematic suspend functions to blocking calls and moved coroutine handling to repository layer:
+**Part 1:** Converted all problematic suspend functions to blocking calls and moved coroutine handling to repository layer:
+
+**Part 2:** Updated repository implementations to handle new DAO return types properly.
 
 **ScoreDao.kt changes:**
 ```kotlin
@@ -59,13 +69,20 @@ fun insertScore(score: ScoreEntity): Long
 
 **LeaderboardRepositoryImpl.kt changes:**
 ```kotlin
-// Added withContext(Dispatchers.IO) for thread safety
+// Part 1: Added withContext(Dispatchers.IO) for thread safety
 override suspend fun getHighestScore(): Int = withContext(Dispatchers.IO) {
     scoreDao.getHighestScore()
 }
 
+// Part 2: Fixed return type mismatches by discarding DAO return values
 override suspend fun saveScore(...) = withContext(Dispatchers.IO) {
     scoreDao.insertScore(scoreEntity)
+    Unit  // Discard Long return value to match interface Unit expectation
+}
+
+override suspend fun clearAllScores() = withContext(Dispatchers.IO) {
+    scoreDao.clearAllScores()
+    Unit  // Discard Int return value to match interface Unit expectation
 }
 ```
 

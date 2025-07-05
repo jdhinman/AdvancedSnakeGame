@@ -44,6 +44,7 @@ class LeaderboardRepositoryImpl @Inject constructor(
             timestamp = System.currentTimeMillis()
         )
         scoreDao.insertScore(scoreEntity)
+        Unit
     }
     
     override suspend fun getHighestScore(): Int = withContext(Dispatchers.IO) {
@@ -60,6 +61,7 @@ class LeaderboardRepositoryImpl @Inject constructor(
     
     override suspend fun clearAllScores() = withContext(Dispatchers.IO) {
         scoreDao.clearAllScores()
+        Unit
     }
     
     override suspend fun getPlayerRank(score: Int): Int = withContext(Dispatchers.IO) {
