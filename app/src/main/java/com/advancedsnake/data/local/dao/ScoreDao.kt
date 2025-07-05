@@ -16,23 +16,23 @@ interface ScoreDao {
     fun getAllScores(): Flow<List<ScoreEntity>>
     
     @Query("SELECT COALESCE(MAX(score), 0) FROM scores")
-    suspend fun getHighestScore(): Int
+    fun getHighestScore(): Int
     
     @Query("SELECT COUNT(*) FROM scores")
-    suspend fun getTotalGamesPlayed(): Int
+    fun getTotalGamesPlayed(): Int
     
     @Query("SELECT COALESCE(AVG(score), 0.0) FROM scores")
-    suspend fun getAverageScore(): Double
+    fun getAverageScore(): Double
     
     @Insert
-    suspend fun insertScore(score: ScoreEntity): Long
+    fun insertScore(score: ScoreEntity): Long
     
     @Query("DELETE FROM scores")
-    suspend fun clearAllScores(): Int
+    fun clearAllScores(): Int
     
     @Query("SELECT * FROM scores WHERE score >= :score ORDER BY score DESC")
     fun getScoresAbove(score: Int): Flow<List<ScoreEntity>>
     
     @Query("SELECT COUNT(*) + 1 FROM scores WHERE score > :score")
-    suspend fun getPlayerRank(score: Int): Int
+    fun getPlayerRank(score: Int): Int
 }

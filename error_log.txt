@@ -47,9 +47,9 @@ Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/
 > Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs NO-SOURCE
 > Task :app:processDebugManifestForPackage
+> Task :app:mergeExtDexDebug
 > Task :app:stripDebugDebugSymbols NO-SOURCE
 > Task :app:mergeLibDexDebug
-> Task :app:mergeExtDexDebug
 > Task :app:validateSigningDebug
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
@@ -80,7 +80,7 @@ Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/
                                      ^
 /home/builder/clone/app/build/tmp/kapt3/stubs/debug/com/advancedsnake/data/local/dao/ScoreDao.java:45: error: Query method parameters should either be a type that can be converted into a database column or a List / Array that contains such type. You can consider adding a Type Adapter for this.
     kotlin.coroutines.Continuation $completion);
-                                                        ^
+                                                              ^
 /home/builder/clone/app/build/tmp/kapt3/stubs/debug/com/advancedsnake/data/local/dao/ScoreDao.java:44: error: Unused parameter: $completion
     public abstract java.lang.Object clearAllScores(@org.jetbrains.annotations.NotNull
                                      ^
@@ -92,7 +92,7 @@ Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/
                                      ^
 /home/builder/clone/app/build/tmp/kapt3/stubs/debug/com/advancedsnake/data/local/dao/ScoreDao.java:40: error: Type of the parameter must be a class annotated with @Entity or a collection/array of it.
     kotlin.coroutines.Continuation $completion);
-                                                        ^
+                                                           ^
 /home/builder/clone/app/build/tmp/kapt3/stubs/debug/com/advancedsnake/data/local/dao/ScoreDao.java:38: error: Not sure how to handle insert method's return type.
     public abstract java.lang.Object insertScore(@org.jetbrains.annotations.NotNull
                                      ^
