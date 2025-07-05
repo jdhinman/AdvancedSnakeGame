@@ -129,6 +129,11 @@ private fun GameBoard(
     var hasDirectionChanged by remember { mutableStateOf(false) }
     var lastDirectionChangeTime by remember { mutableStateOf(0L) }
     
+    // Extract settings values for use inside Canvas
+    val showGrid = settings.showGrid
+    val bodyColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
+    val headColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex))
+    
     Canvas(
         modifier = modifier
             .aspectRatio(gameState.boardWidth.toFloat() / gameState.boardHeight.toFloat())
@@ -204,7 +209,7 @@ private fun DrawScope.drawGame(gameState: GameState) {
     )
     
     // Draw grid lines (if enabled in settings)
-    if (settings.showGrid) {
+    if (showGrid) {
         val gridColor = Color.Gray.copy(alpha = 0.3f)
         for (x in 0..gameState.boardWidth) {
             drawLine(
@@ -223,10 +228,6 @@ private fun DrawScope.drawGame(gameState: GameState) {
             )
         }
     }
-    
-    // Get theme colors
-    val bodyColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
-    val headColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex))
     
     // Draw snake body
     gameState.snake.body.forEach { bodyPart ->
