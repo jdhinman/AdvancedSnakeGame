@@ -129,10 +129,10 @@ private fun GameBoard(
     var hasDirectionChanged by remember { mutableStateOf(false) }
     var lastDirectionChangeTime by remember { mutableStateOf(0L) }
     
-    // Extract settings values for use inside Canvas
-    val showGrid = settings.showGrid
-    val bodyColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
-    val headColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex))
+    // Extract settings values for Canvas drawing scope (cache-busting syntax)
+    val isGridVisible = settings.showGrid
+    val snakeBodyColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
+    val snakeHeadColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex))
     
     Canvas(
         modifier = modifier
@@ -209,7 +209,7 @@ private fun DrawScope.drawGame(gameState: GameState) {
     )
     
     // Draw grid lines (if enabled in settings)
-    if (showGrid) {
+    if (isGridVisible) {
         val gridColor = Color.Gray.copy(alpha = 0.3f)
         for (x in 0..gameState.boardWidth) {
             drawLine(
@@ -231,11 +231,11 @@ private fun DrawScope.drawGame(gameState: GameState) {
     
     // Draw snake body
     gameState.snake.body.forEach { bodyPart ->
-        drawSnakeSegment(bodyPart, cellWidth, cellHeight, bodyColor)
+        drawSnakeSegment(bodyPart, cellWidth, cellHeight, snakeBodyColor)
     }
     
     // Draw snake head with enhanced visuals and theme color
-    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight, headColor)
+    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight, snakeHeadColor)
     
     // Draw food
     drawFood(gameState.food.position, cellWidth, cellHeight)
