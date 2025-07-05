@@ -22,6 +22,52 @@
 
 ## Build Fixes History
 
+### Fix #7: Gradle Wrapper Download Timeout in Codemagic CI
+**Date:** 2025-01-05 18:30 UTC  
+**Commit:** 489756c  
+
+**Error:**
+```
+Exception in thread "main" java.io.IOException: Downloading from https://services.gradle.org/distributions/gradle-8.14-bin.zip failed: timeout (10000ms)
+Caused by: java.net.SocketTimeoutException: Read timed out
+```
+
+**Root Cause:**  
+Codemagic build environment experiencing network connectivity issues when downloading the Gradle 8.14 distribution. The default 10-second timeout was insufficient for completing the download under slower network conditions or during high traffic periods.
+
+**Solution:**  
+Increased the network timeout in `gradle-wrapper.properties`:
+```properties
+# BEFORE: 10-second timeout causing failures
+networkTimeout=10000
+
+# AFTER: 60-second timeout for reliable downloads  
+networkTimeout=60000
+```
+
+**Files Modified:**
+- `gradle/wrapper/gradle-wrapper.properties` (line 4)
+
+**Technical Details:**
+- **Network timeout**: Controls how long Gradle wrapper waits for distribution download
+- **Download size**: gradle-8.14-bin.zip is approximately 130MB
+- **CI environment**: Codemagic build agents may have variable network performance
+- **Retry behavior**: Gradle wrapper doesn't automatically retry failed downloads
+
+**Alternative Solutions Considered:**
+1. **Gradle Build Cache**: Would reduce repeated downloads but doesn't solve initial download issue
+2. **Pre-installed Gradle**: Codemagic supports this but wrapper approach is more reliable
+3. **Different mirror**: services.gradle.org is the official and most reliable source
+
+**Prevention:** For CI/CD environments, always use generous network timeouts (30-60 seconds) to account for variable network conditions and large download sizes.
+
+**Monitoring:** If this error recurs, consider:
+- Using Codemagic's pre-installed Gradle instead of wrapper
+- Implementing build cache strategies
+- Upgrading to newer Gradle versions with better retry mechanisms
+
+---
+
 ### Fix #6: Room DAO Annotation Processor (Kapt) Compilation Errors
 **Date:** 2025-01-05 18:15 UTC  
 **Commit:** a5c7101  
@@ -359,5 +405,5 @@ rm app/src/main/res/drawable/ic_launcher_vector.xml
 
 ---
 
-*Last Updated: 2025-01-05 18:20 UTC*  
-*Document Version: 2.1*
+*Last Updated: 2025-01-05 18:35 UTC*  
+*Document Version: 2.2*
