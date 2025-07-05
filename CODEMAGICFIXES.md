@@ -22,6 +22,75 @@
 
 ## Build Fixes History
 
+### Fix #8: Room DAO Kapt Compatibility - Blocking Calls Approach  
+**Date:** 2025-01-05 18:50 UTC  
+**Commit:** 6bfb08a  
+
+**Error:**
+```
+> Task :app:kaptDebugKotlin FAILED
+error: Query method parameters should either be a type that can be converted into a database column or a List / Array that contains such type.
+kotlin.coroutines.Continuation $completion
+error: Not sure how to handle insert method's return type.
+```
+
+**Root Cause:**  
+Room 2.5.0 with Kotlin 1.9.10 and Kapt annotation processor has compatibility issues with suspend functions in DAO interfaces. The Kapt processor was unable to properly handle the coroutines continuation parameters generated for suspend functions, despite using COALESCE and explicit return types.
+
+**Solution:**  
+Converted all problematic suspend functions to blocking calls and moved coroutine handling to repository layer:
+
+**ScoreDao.kt changes:**
+```kotlin
+// BEFORE: Suspend functions causing Kapt errors
+@Query("SELECT COALESCE(MAX(score), 0) FROM scores")
+suspend fun getHighestScore(): Int
+
+@Insert
+suspend fun insertScore(score: ScoreEntity): Long
+
+// AFTER: Blocking calls that Kapt can process
+@Query("SELECT COALESCE(MAX(score), 0) FROM scores")
+fun getHighestScore(): Int
+
+@Insert  
+fun insertScore(score: ScoreEntity): Long
+```
+
+**LeaderboardRepositoryImpl.kt changes:**
+```kotlin
+// Added withContext(Dispatchers.IO) for thread safety
+override suspend fun getHighestScore(): Int = withContext(Dispatchers.IO) {
+    scoreDao.getHighestScore()
+}
+
+override suspend fun saveScore(...) = withContext(Dispatchers.IO) {
+    scoreDao.insertScore(scoreEntity)
+}
+```
+
+**Files Modified:**
+- `app/src/main/java/com/advancedsnake/data/local/dao/ScoreDao.kt`
+- `app/src/main/java/com/advancedsnake/data/repositories/LeaderboardRepositoryImpl.kt`
+
+**Technical Benefits:**
+- **Kapt Compatibility**: Blocking DAO methods avoid coroutine continuation processing issues
+- **Thread Safety**: withContext(Dispatchers.IO) ensures database operations run on IO thread
+- **Performance**: Same async behavior maintained at repository layer
+- **Version Compatibility**: Works with older Room/Kotlin combinations
+
+**Architecture Impact**: 
+- DAO layer: Simple blocking calls (easier for Kapt to process)
+- Repository layer: Coroutine handling with proper dispatchers
+- Domain/UI layers: Unchanged suspend function interfaces
+
+**Alternative Approaches Rejected:**
+1. **Upgrade Room/Kotlin versions**: Would require updating entire project
+2. **Replace Kapt with KSP**: Major build system change
+3. **Remove coroutines entirely**: Would break existing async architecture
+
+---
+
 ### Fix #7: Gradle Wrapper Download Timeout in Codemagic CI
 **Date:** 2025-01-05 18:30 UTC  
 **Commit:** 489756c  
@@ -405,5 +474,5 @@ rm app/src/main/res/drawable/ic_launcher_vector.xml
 
 ---
 
-*Last Updated: 2025-01-05 18:35 UTC*  
-*Document Version: 2.2*
+*Last Updated: 2025-01-05 18:55 UTC*  
+*Document Version: 2.3*
