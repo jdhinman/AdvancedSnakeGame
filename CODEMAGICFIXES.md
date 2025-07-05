@@ -22,6 +22,71 @@
 
 ## Build Fixes History
 
+### Fix #6: Room DAO Annotation Processor (Kapt) Compilation Errors
+**Date:** 2025-01-05 18:15 UTC  
+**Commit:** a5c7101  
+
+**Error:**
+```
+> Task :app:kaptDebugKotlin FAILED
+error: Query method parameters should either be a type that can be converted into a database column or a List / Array that contains such type.
+error: Not sure how to handle query method's return type (java.lang.Object). DELETE query methods must either return void or int.
+error: Not sure how to handle insert method's return type.
+```
+
+**Root Cause:**  
+Room's Kapt annotation processor couldn't handle:
+1. **Nullable return types** from SQL aggregate functions (MAX, AVG) when table is empty
+2. **Missing return type specifications** for @Insert and @Query DELETE operations
+3. **Implicit nullable types** causing Java stub generation issues during compilation
+
+**Solution:**  
+**ScoreDao.kt fixes:**
+```kotlin
+// BEFORE: Nullable return types causing Kapt errors
+@Query("SELECT MAX(score) FROM scores")
+suspend fun getHighestScore(): Int?
+
+@Query("SELECT AVG(score) FROM scores") 
+suspend fun getAverageScore(): Double?
+
+@Insert
+suspend fun insertScore(score: ScoreEntity)
+
+@Query("DELETE FROM scores")
+suspend fun clearAllScores()
+
+// AFTER: Non-nullable with SQL COALESCE and explicit return types
+@Query("SELECT COALESCE(MAX(score), 0) FROM scores")
+suspend fun getHighestScore(): Int
+
+@Query("SELECT COALESCE(AVG(score), 0.0) FROM scores")
+suspend fun getAverageScore(): Double
+
+@Insert
+suspend fun insertScore(score: ScoreEntity): Long
+
+@Query("DELETE FROM scores")
+suspend fun clearAllScores(): Int
+```
+
+**LeaderboardRepositoryImpl.kt updates:**
+- Removed null-safety operators (?:) since DAO now returns non-nullable types
+- Simplified method implementations to directly return DAO results
+
+**Files Modified:**
+- `app/src/main/java/com/advancedsnake/data/local/dao/ScoreDao.kt`
+- `app/src/main/java/com/advancedsnake/data/repositories/LeaderboardRepositoryImpl.kt`
+
+**Technical Details:**
+- **COALESCE function**: SQL function that returns first non-null value, provides defaults for empty tables
+- **Return type specification**: @Insert returns Long (row ID), DELETE returns Int (affected rows)
+- **Kapt compatibility**: Non-nullable types generate cleaner Java stubs for annotation processing
+
+**Prevention:** When using Room with aggregate SQL functions, always use COALESCE or similar to ensure non-nullable return types, and explicitly specify return types for @Insert and @Query DELETE operations.
+
+---
+
 ### Major Feature Update #5: Complete Leaderboard, Settings & Enhanced Visuals
 **Date:** 2025-01-05 17:30 UTC  
 **Commit:** 28f01ff  
@@ -294,5 +359,5 @@ rm app/src/main/res/drawable/ic_launcher_vector.xml
 
 ---
 
-*Last Updated: 2025-01-05 17:35 UTC*  
-*Document Version: 2.0*
+*Last Updated: 2025-01-05 18:20 UTC*  
+*Document Version: 2.1*
