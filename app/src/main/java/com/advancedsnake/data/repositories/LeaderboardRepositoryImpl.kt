@@ -45,7 +45,7 @@ class LeaderboardRepositoryImpl @Inject constructor(
     }
     
     override suspend fun getHighestScore(): Int {
-        return scoreDao.getHighestScore() ?: 0
+        return scoreDao.getHighestScore()
     }
     
     override suspend fun getTotalGamesPlayed(): Int {
@@ -53,7 +53,7 @@ class LeaderboardRepositoryImpl @Inject constructor(
     }
     
     override suspend fun getAverageScore(): Double {
-        return scoreDao.getAverageScore() ?: 0.0
+        return scoreDao.getAverageScore()
     }
     
     override suspend fun clearAllScores() {

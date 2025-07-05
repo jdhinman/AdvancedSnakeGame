@@ -15,20 +15,20 @@ interface ScoreDao {
     @Query("SELECT * FROM scores ORDER BY score DESC")
     fun getAllScores(): Flow<List<ScoreEntity>>
     
-    @Query("SELECT MAX(score) FROM scores")
-    suspend fun getHighestScore(): Int?
+    @Query("SELECT COALESCE(MAX(score), 0) FROM scores")
+    suspend fun getHighestScore(): Int
     
     @Query("SELECT COUNT(*) FROM scores")
     suspend fun getTotalGamesPlayed(): Int
     
-    @Query("SELECT AVG(score) FROM scores")
-    suspend fun getAverageScore(): Double?
+    @Query("SELECT COALESCE(AVG(score), 0.0) FROM scores")
+    suspend fun getAverageScore(): Double
     
     @Insert
-    suspend fun insertScore(score: ScoreEntity)
+    suspend fun insertScore(score: ScoreEntity): Long
     
     @Query("DELETE FROM scores")
-    suspend fun clearAllScores()
+    suspend fun clearAllScores(): Int
     
     @Query("SELECT * FROM scores WHERE score >= :score ORDER BY score DESC")
     fun getScoresAbove(score: Int): Flow<List<ScoreEntity>>
