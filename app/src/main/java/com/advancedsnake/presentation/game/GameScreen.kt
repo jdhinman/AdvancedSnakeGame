@@ -119,7 +119,7 @@ private fun ScoreDisplay(
 @Composable
 private fun GameBoard(
     gameState: GameState,
-    settings: GameSettings,
+    settings: GameSettings, // CACHE-BUST: user preferences for game visuals
     onDirectionChange: (Direction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -129,10 +129,12 @@ private fun GameBoard(
     var hasDirectionChanged by remember { mutableStateOf(false) }
     var lastDirectionChangeTime by remember { mutableStateOf(0L) }
     
-    // Extract settings values for Canvas drawing scope (cache-busting syntax)
-    val isGridVisible = settings.showGrid
-    val snakeBodyColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
-    val snakeHeadColor = Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex))
+    // NUCLEAR CACHE-BUST 2025-01-05-23:58: Extract settings for Canvas scope  
+    val cacheInvalidator = System.currentTimeMillis() // Force recompilation
+    val gameSettings = settings
+    val isGridVisible = gameSettings.showGrid
+    val snakeBodyColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.bodyColorHex))
+    val snakeHeadColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.headColorHex))
     
     Canvas(
         modifier = modifier
