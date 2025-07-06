@@ -22,6 +22,82 @@
 
 ## Build Fixes History
 
+### Fix #11: Kotlin Variable Scope Error in Compose Canvas - REPEATED ISSUE
+**Date:** 2025-01-06 00:15 UTC  
+**Commit:** [PENDING]  
+
+**Error:**
+```
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:212:9 Unresolved reference: isGridVisible
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:234:59 Unresolved reference: snakeBodyColor
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:238:91 Unresolved reference: snakeHeadColor
+```
+
+**Root Cause:**  
+**IDENTICAL TO FIX #10** - This is the **EXACT SAME ISSUE** that was previously fixed. The variables `isGridVisible`, `snakeBodyColor`, and `snakeHeadColor` are defined in the `GameBoard` Composable scope but are being accessed inside the `DrawScope.drawGame()` function where they're not in scope.
+
+**Critical Pattern Recognition:**  
+This is now the **FOURTH** occurrence of the same core issue pattern:
+1. Fix #10: Initial variable scope error
+2. Fix #10 cache-bust: Cache persistence requiring variable renames
+3. Fix #11: **SAME ISSUE RETURNS** - indicating incomplete fix or code regression
+
+**Root Technical Issue:**  
+**Canvas DrawScope Variable Access** - Compose Canvas DrawScope cannot directly access variables from the enclosing Composable scope. Variables must be passed as parameters to functions called within the Canvas.
+
+**Solution Applied:**  
+**Parameter Passing with Cache-Busting** - Modified `drawGame()` function to accept required parameters:
+
+**GameScreen.kt changes:**
+```kotlin
+// BEFORE: DrawScope trying to access Composable variables (fails)
+private fun DrawScope.drawGame(gameState: GameState) {
+    if (isGridVisible) { ... }  // ❌ Unresolved reference
+    drawSnakeSegment(..., snakeBodyColor)  // ❌ Unresolved reference
+    drawSnakeHead(..., snakeHeadColor)  // ❌ Unresolved reference
+}
+
+// AFTER: Parameters passed explicitly (works)
+private fun DrawScope.drawGame(
+    gameState: GameState,
+    gridDisplayEnabled: Boolean, // CACHE-BUST: renamed parameter
+    bodyColor: Color, // CACHE-BUST: renamed parameter
+    headColor: Color // CACHE-BUST: renamed parameter
+) {
+    if (gridDisplayEnabled) { ... }  // ✅ Works
+    drawSnakeSegment(..., bodyColor)  // ✅ Works
+    drawSnakeHead(..., headColor)  // ✅ Works
+}
+
+// Canvas call updated to pass parameters
+Canvas(...) {
+    drawGame(gameState, isGridVisible, snakeBodyColor, snakeHeadColor)
+}
+```
+
+**Files Modified:**
+- `app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt` (lines 199, 203-208, 219, 241, 245)
+
+**Cache-Busting Techniques Applied:**
+1. **Parameter Renaming**: `isGridVisible → gridDisplayEnabled`, `snakeBodyColor → bodyColor`, `snakeHeadColor → headColor`
+2. **Comment Updates**: Added timestamps and cache-bust identifiers
+3. **Function Signature Changes**: Modified function signature to force recompilation
+
+**Critical Learning:**  
+**INCOMPLETE ORIGINAL FIX** - The original Fix #10 only applied variable extraction but did not properly pass the variables to the Canvas DrawScope. This demonstrates the importance of **complete scope analysis** when fixing Compose Canvas issues.
+
+**Prevention Strategies:**
+1. **Complete Scope Analysis**: Always verify that extracted variables are properly passed to Canvas functions
+2. **DrawScope Parameter Passing**: Any variable needed inside Canvas must be passed as function parameters
+3. **Regression Testing**: Test Canvas-related fixes thoroughly to ensure complete resolution
+4. **Documentation**: Update architecture notes to emphasize DrawScope limitations
+
+**Architecture Rule Established:**  
+**Canvas DrawScope Parameter Pattern** - All Canvas drawing functions must receive required data as explicit parameters. Never assume access to enclosing Composable scope variables.
+
+---
+
 ### Fix #10: Kotlin Variable Scope Error in Compose Canvas
 **Date:** 2025-01-05 23:55 UTC  
 **Commit:** 5599869  

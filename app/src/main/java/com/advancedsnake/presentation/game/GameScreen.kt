@@ -129,12 +129,13 @@ private fun GameBoard(
     var hasDirectionChanged by remember { mutableStateOf(false) }
     var lastDirectionChangeTime by remember { mutableStateOf(0L) }
     
-    // NUCLEAR CACHE-BUST 2025-01-05-23:58: Extract settings for Canvas scope  
+    // NUCLEAR CACHE-BUST 2025-01-06-00:15: Extract settings for Canvas scope - FIX VARIABLE SCOPE
     val cacheInvalidator = System.currentTimeMillis() // Force recompilation
     val gameSettings = settings
     val isGridVisible = gameSettings.showGrid
     val snakeBodyColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.bodyColorHex))
     val snakeHeadColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.headColorHex))
+    // CACHE-BUST: Ensure parameters are passed to Canvas DrawScope correctly
     
     Canvas(
         modifier = modifier
@@ -196,11 +197,16 @@ private fun GameBoard(
                 )
             }
     ) {
-        drawGame(gameState)
+        drawGame(gameState, isGridVisible, snakeBodyColor, snakeHeadColor)
     }
 }
 
-private fun DrawScope.drawGame(gameState: GameState) {
+private fun DrawScope.drawGame(
+    gameState: GameState,
+    gridDisplayEnabled: Boolean, // CACHE-BUST: renamed from isGridVisible
+    bodyColor: Color, // CACHE-BUST: renamed from snakeBodyColor
+    headColor: Color // CACHE-BUST: renamed from snakeHeadColor
+) {
     val cellWidth = size.width / gameState.boardWidth
     val cellHeight = size.height / gameState.boardHeight
     
@@ -211,7 +217,7 @@ private fun DrawScope.drawGame(gameState: GameState) {
     )
     
     // Draw grid lines (if enabled in settings)
-    if (isGridVisible) {
+    if (gridDisplayEnabled) {
         val gridColor = Color.Gray.copy(alpha = 0.3f)
         for (x in 0..gameState.boardWidth) {
             drawLine(
@@ -233,11 +239,11 @@ private fun DrawScope.drawGame(gameState: GameState) {
     
     // Draw snake body
     gameState.snake.body.forEach { bodyPart ->
-        drawSnakeSegment(bodyPart, cellWidth, cellHeight, snakeBodyColor)
+        drawSnakeSegment(bodyPart, cellWidth, cellHeight, bodyColor)
     }
     
     // Draw snake head with enhanced visuals and theme color
-    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight, snakeHeadColor)
+    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight, headColor)
     
     // Draw food
     drawFood(gameState.food.position, cellWidth, cellHeight)
