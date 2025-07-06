@@ -1,7 +1,313 @@
-Downloading https://services.gradle.org/distributions/gradle-8.14-bin.zip
-.............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%..............100%
++ cd /Users/builder/clone
++ echo '=== Starting Debugging and Build Process ==='
+=== Starting Debugging and Build Process ===
+++ pwd
++ echo 'Current directory: /Users/builder/clone'
+Current directory: /Users/builder/clone
++ ls -laR .
+total 216
+drwxr-xr-x  27 builder  staff   864 Jul  6 13:43 .
+drwxr-x---+ 55 builder  staff  1760 Jul  6 13:43 ..
+drwxr-xr-x  13 builder  staff   416 Jul  6 13:43 .git
+-rw-r--r--   1 builder  staff  1954 Jul  6 13:43 .gitignore
+drwxr-xr-x   5 builder  staff   160 Jul  6 13:43 app
+-rw-r--r--   1 builder  staff  4250 Jul  6 13:43 BUILD_INSTRUCTIONS.md
+-rw-r--r--   1 builder  staff  3156 Jul  6 13:43 BUILD_STATUS.md
+-rw-r--r--   1 builder  staff   336 Jul  6 13:43 build.gradle
+-rw-r--r--   1 builder  staff  2874 Jul  6 13:43 CODEMAGIC_SETUP.md
+-rw-r--r--   1 builder  staff   885 Jul  6 13:43 codemagic-java-only.yaml
+-rw-r--r--   1 builder  staff  1051 Jul  6 13:43 codemagic-minimal.yaml
+-rw-r--r--   1 builder  staff  1293 Jul  6 13:43 codemagic-no-wrapper.yaml
+-rw-r--r--   1 builder  staff  2219 Jul  6 13:43 codemagic-official.yaml
+-rw-r--r--   1 builder  staff   714 Jul  6 13:43 codemagic-simple.yaml
+-rw-r--r--   1 builder  staff   881 Jul  6 13:43 codemagic-wrapper-fix.yaml
+-rw-r--r--   1 builder  staff  1240 Jul  6 13:43 codemagic-wrapper-regen.yaml
+-rw-r--r--   1 builder  staff  5147 Jul  6 13:43 codemagic.yaml
+-rwxr-xr-x   1 builder  staff   750 Jul  6 13:43 get-app-id.sh
+drwxr-xr-x   3 builder  staff    96 Jul  6 13:43 gradle
+-rw-r--r--   1 builder  staff   259 Jul  6 13:43 gradle.properties
+-rwxr-xr-x   1 builder  staff  8767 Jul  6 13:43 gradlew
+-rw-r--r--   1 builder  staff  1078 Jul  6 13:43 LICENSE
+-rw-r--r--   1 builder  staff    37 Jul  6 13:43 local.properties
+-rw-r--r--   1 builder  staff  5137 Jul  6 13:43 PROPER_CODEMAGIC_IMPLEMENTATION.md
+-rw-r--r--   1 builder  staff  5670 Jul  6 13:43 README.md
+drwxr-xr-x   3 builder  staff    96 Jul  6 13:43 scripts
+-rw-r--r--   1 builder  staff   321 Jul  6 13:43 settings.gradle
 
-Welcome to Gradle 8.14!
+./.git:
+total 56
+drwxr-xr-x  13 builder  staff   416 Jul  6 13:43 .
+drwxr-xr-x  27 builder  staff   864 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff   327 Jul  6 13:43 config
+-rw-r--r--   1 builder  staff    73 Jul  6 13:43 description
+-rw-r--r--   1 builder  staff    21 Jul  6 13:43 HEAD
+drwxr-xr-x  15 builder  staff   480 Jul  6 13:43 hooks
+-rw-r--r--   1 builder  staff  5337 Jul  6 13:43 index
+drwxr-xr-x   3 builder  staff    96 Jul  6 13:43 info
+drwxr-xr-x   4 builder  staff   128 Jul  6 13:43 logs
+drwxr-xr-x   4 builder  staff   128 Jul  6 13:43 objects
+-rw-r--r--   1 builder  staff    41 Jul  6 13:43 ORIG_HEAD
+-rw-r--r--   1 builder  staff   112 Jul  6 13:43 packed-refs
+drwxr-xr-x   5 builder  staff   160 Jul  6 13:43 refs
+
+./.git/hooks:
+total 120
+drwxr-xr-x  15 builder  staff   480 Jul  6 13:43 .
+drwxr-xr-x  13 builder  staff   416 Jul  6 13:43 ..
+-rwxr-xr-x   1 builder  staff   478 Jul  6 13:43 applypatch-msg.sample
+-rwxr-xr-x   1 builder  staff   896 Jul  6 13:43 commit-msg.sample
+-rwxr-xr-x   1 builder  staff  4726 Jul  6 13:43 fsmonitor-watchman.sample
+-rwxr-xr-x   1 builder  staff   189 Jul  6 13:43 post-update.sample
+-rwxr-xr-x   1 builder  staff   424 Jul  6 13:43 pre-applypatch.sample
+-rwxr-xr-x   1 builder  staff  1643 Jul  6 13:43 pre-commit.sample
+-rwxr-xr-x   1 builder  staff   416 Jul  6 13:43 pre-merge-commit.sample
+-rwxr-xr-x   1 builder  staff  1374 Jul  6 13:43 pre-push.sample
+-rwxr-xr-x   1 builder  staff  4898 Jul  6 13:43 pre-rebase.sample
+-rwxr-xr-x   1 builder  staff   544 Jul  6 13:43 pre-receive.sample
+-rwxr-xr-x   1 builder  staff  1492 Jul  6 13:43 prepare-commit-msg.sample
+-rwxr-xr-x   1 builder  staff  2783 Jul  6 13:43 push-to-checkout.sample
+-rwxr-xr-x   1 builder  staff  3650 Jul  6 13:43 update.sample
+
+./.git/info:
+total 8
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  13 builder  staff  416 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  240 Jul  6 13:43 exclude
+
+./.git/logs:
+total 8
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  13 builder  staff  416 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  413 Jul  6 13:43 HEAD
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 refs
+
+./.git/logs/refs:
+total 0
+drwxr-xr-x  4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  4 builder  staff  128 Jul  6 13:43 ..
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 heads
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 remotes
+
+./.git/logs/refs/heads:
+total 8
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  4 builder  staff  128 Jul  6 13:43 ..
+-rw-r--r--  1 builder  staff  207 Jul  6 13:43 main
+
+./.git/logs/refs/remotes:
+total 0
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  4 builder  staff  128 Jul  6 13:43 ..
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 origin
+
+./.git/logs/refs/remotes/origin:
+total 8
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 ..
+-rw-r--r--  1 builder  staff  207 Jul  6 13:43 HEAD
+
+./.git/objects:
+total 0
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  13 builder  staff  416 Jul  6 13:43 ..
+drwxr-xr-x   2 builder  staff   64 Jul  6 13:43 info
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 pack
+
+./.git/objects/info:
+total 0
+drwxr-xr-x  2 builder  staff   64 Jul  6 13:43 .
+drwxr-xr-x  4 builder  staff  128 Jul  6 13:43 ..
+
+./.git/objects/pack:
+total 96
+drwxr-xr-x  4 builder  staff    128 Jul  6 13:43 .
+drwxr-xr-x  4 builder  staff    128 Jul  6 13:43 ..
+-r--r--r--  1 builder  staff   4068 Jul  6 13:43 pack-616ccd7a0cd295c29a60d58f457775cad385a243.idx
+-r--r--r--  1 builder  staff  41182 Jul  6 13:43 pack-616ccd7a0cd295c29a60d58f457775cad385a243.pack
+
+./.git/refs:
+total 0
+drwxr-xr-x   5 builder  staff  160 Jul  6 13:43 .
+drwxr-xr-x  13 builder  staff  416 Jul  6 13:43 ..
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 heads
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 remotes
+drwxr-xr-x   2 builder  staff   64 Jul  6 13:43 tags
+
+./.git/refs/heads:
+total 8
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  5 builder  staff  160 Jul  6 13:43 ..
+-rw-r--r--  1 builder  staff   41 Jul  6 13:43 main
+
+./.git/refs/remotes:
+total 0
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  5 builder  staff  160 Jul  6 13:43 ..
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 origin
+
+./.git/refs/remotes/origin:
+total 8
+drwxr-xr-x  3 builder  staff  96 Jul  6 13:43 .
+drwxr-xr-x  3 builder  staff  96 Jul  6 13:43 ..
+-rw-r--r--  1 builder  staff  30 Jul  6 13:43 HEAD
+
+./.git/refs/tags:
+total 0
+drwxr-xr-x  2 builder  staff   64 Jul  6 13:43 .
+drwxr-xr-x  5 builder  staff  160 Jul  6 13:43 ..
+
+./app:
+total 16
+drwxr-xr-x   5 builder  staff   160 Jul  6 13:43 .
+drwxr-xr-x  27 builder  staff   864 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  1185 Jul  6 13:43 build.gradle
+-rw-r--r--   1 builder  staff   654 Jul  6 13:43 proguard-rules.pro
+drwxr-xr-x   3 builder  staff    96 Jul  6 13:43 src
+
+./app/src:
+total 0
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  5 builder  staff  160 Jul  6 13:43 ..
+drwxr-xr-x  5 builder  staff  160 Jul  6 13:43 main
+
+./app/src/main:
+total 8
+drwxr-xr-x   5 builder  staff  160 Jul  6 13:43 .
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  997 Jul  6 13:43 AndroidManifest.xml
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 java
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 res
+
+./app/src/main/java:
+total 0
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  5 builder  staff  160 Jul  6 13:43 ..
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 com
+
+./app/src/main/java/com:
+total 0
+drwxr-xr-x  3 builder  staff  96 Jul  6 13:43 .
+drwxr-xr-x  3 builder  staff  96 Jul  6 13:43 ..
+drwxr-xr-x  3 builder  staff  96 Jul  6 13:43 termux
+
+./app/src/main/java/com/termux:
+total 0
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 ..
+drwxr-xr-x  6 builder  staff  192 Jul  6 13:43 snake
+
+./app/src/main/java/com/termux/snake:
+total 40
+drwxr-xr-x  6 builder  staff   192 Jul  6 13:43 .
+drwxr-xr-x  3 builder  staff    96 Jul  6 13:43 ..
+-rw-r--r--  1 builder  staff   647 Jul  6 13:43 Food.kt
+-rw-r--r--  1 builder  staff  7307 Jul  6 13:43 GameView.kt
+-rw-r--r--  1 builder  staff  3397 Jul  6 13:43 MainActivity.kt
+-rw-r--r--  1 builder  staff  2798 Jul  6 13:43 Snake.kt
+
+./app/src/main/res:
+total 0
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 .
+drwxr-xr-x   5 builder  staff  160 Jul  6 13:43 ..
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 drawable
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 layout
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 mipmap-hdpi
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 mipmap-mdpi
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 mipmap-xhdpi
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 mipmap-xxhdpi
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 mipmap-xxxhdpi
+drwxr-xr-x   5 builder  staff  160 Jul  6 13:43 values
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 xml
+
+./app/src/main/res/drawable:
+total 16
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  339 Jul  6 13:43 ic_launcher_background.xml
+-rw-r--r--   1 builder  staff  707 Jul  6 13:43 ic_launcher_foreground.xml
+
+./app/src/main/res/layout:
+total 8
+drwxr-xr-x   3 builder  staff    96 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff   352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  3008 Jul  6 13:43 activity_main.xml
+
+./app/src/main/res/mipmap-hdpi:
+total 16
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher_round.xml
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher.xml
+
+./app/src/main/res/mipmap-mdpi:
+total 16
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher_round.xml
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher.xml
+
+./app/src/main/res/mipmap-xhdpi:
+total 16
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher_round.xml
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher.xml
+
+./app/src/main/res/mipmap-xxhdpi:
+total 16
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher_round.xml
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher.xml
+
+./app/src/main/res/mipmap-xxxhdpi:
+total 16
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher_round.xml
+-rw-r--r--   1 builder  staff  272 Jul  6 13:43 ic_launcher.xml
+
+./app/src/main/res/values:
+total 24
+drwxr-xr-x   5 builder  staff  160 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  339 Jul  6 13:43 colors.xml
+-rw-r--r--   1 builder  staff  394 Jul  6 13:43 strings.xml
+-rw-r--r--   1 builder  staff  588 Jul  6 13:43 themes.xml
+
+./app/src/main/res/xml:
+total 16
+drwxr-xr-x   4 builder  staff  128 Jul  6 13:43 .
+drwxr-xr-x  11 builder  staff  352 Jul  6 13:43 ..
+-rw-r--r--   1 builder  staff  128 Jul  6 13:43 backup_rules.xml
+-rw-r--r--   1 builder  staff  269 Jul  6 13:43 data_extraction_rules.xml
+
+./gradle:
+total 0
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  27 builder  staff  864 Jul  6 13:43 ..
+drwxr-xr-x   3 builder  staff   96 Jul  6 13:43 wrapper
+
+./gradle/wrapper:
+total 8
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 .
+drwxr-xr-x  3 builder  staff   96 Jul  6 13:43 ..
+-rw-r--r--  1 builder  staff  250 Jul  6 13:43 gradle-wrapper.properties
+
+./scripts:
+total 16
+drwxr-xr-x   3 builder  staff    96 Jul  6 13:43 .
+drwxr-xr-x  27 builder  staff   864 Jul  6 13:43 ..
+-rwxr-xr-x   1 builder  staff  6370 Jul  6 13:43 codemagic-api.sh
++ echo '--- Checking Gradle Wrapper ---'
+--- Checking Gradle Wrapper ---
++ '[' '!' -f gradle/wrapper/gradle-wrapper.jar ']'
++ echo 'Gradle wrapper jar not found. Attempting to regenerate...'
+Gradle wrapper jar not found. Attempting to regenerate...
++ command -v gradle
++ gradle wrapper --gradle-version=8.4
+
+Welcome to Gradle 8.14.1!
 
 Here are the highlights of this release:
  - Java 24 support
@@ -9,11 +315,71 @@ Here are the highlights of this release:
  - Enhancements to test reporting
  - Build Authoring improvements
 
-For more details see https://docs.gradle.org/8.14/release-notes.html
+For more details see https://docs.gradle.org/8.14.1/release-notes.html
 
 Starting a Gradle Daemon (subsequent builds will be faster)
-Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/share/android-sdk/cmdline-tools/latest-2' (Expected '/usr/local/share/android-sdk/cmdline-tools/latest')
-Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/share/android-sdk/cmdline-tools/latest-2' (Expected '/usr/local/share/android-sdk/cmdline-tools/latest')
+
+> Configure project :app
+WARNING: The option setting 'android.aapt2Version=8.6.1-11315950' is experimental.
+
+> Task :wrapper
+
+[Incubating] Problems report is available at: file:///Users/builder/clone/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 48s
+1 actionable task: 1 executed
++ chmod +x gradlew
++ echo 'Gradle wrapper regeneration command executed.'
+Gradle wrapper regeneration command executed.
++ echo '--- After Wrapper Check ---'
+--- After Wrapper Check ---
++ ls -la gradle/wrapper/
+total 96
+drwxr-xr-x  4 builder  staff    128 Jul  6 13:44 .
+drwxr-xr-x  3 builder  staff     96 Jul  6 13:43 ..
+-rw-r--r--  1 builder  staff  43764 Jul  6 13:44 gradle-wrapper.jar
+-rw-r--r--  1 builder  staff    250 Jul  6 13:44 gradle-wrapper.properties
++ ls -la gradlew
+-rwxr-xr-x  1 builder  staff  8733 Jul  6 13:44 gradlew
++ echo '--- Attempting Build ---'
+--- Attempting Build ---
++ echo '--- Checking AAPT2 Version ---'
+--- Checking AAPT2 Version ---
+++ find /usr/local/share/android-sdk -name aapt2 -type f
+++ head -n 1
++ AAPT2_PATH=/usr/local/share/android-sdk/build-tools/35.0.1/aapt2
++ '[' -n /usr/local/share/android-sdk/build-tools/35.0.1/aapt2 ']'
++ echo 'Found aapt2 at: /usr/local/share/android-sdk/build-tools/35.0.1/aapt2'
+Found aapt2 at: /usr/local/share/android-sdk/build-tools/35.0.1/aapt2
++ /usr/local/share/android-sdk/build-tools/35.0.1/aapt2 version
+Android Asset Packaging Tool (aapt) 2.19-12874835
++ echo '--- Attempting build with gradlew...'
+--- Attempting build with gradlew...
++ ./gradlew assembleDebug --no-daemon --stacktrace
+Downloading https://services.gradle.org/distributions/gradle-8.4-bin.zip
+............10%............20%.............30%............40%.............50%............60%.............70%............80%.............90%............100%
+
+Welcome to Gradle 8.4!
+
+Here are the highlights of this release:
+ - Compiling and testing with Java 21
+ - Faster Java compilation on Windows
+ - Role focused dependency configurations creation
+
+For more details see https://docs.gradle.org/8.4/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.4/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.aapt2Version=8.6.1-11315950' is experimental.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
 Checking the license for package Android SDK Build-Tools 33.0.1 in /usr/local/share/android-sdk/licenses
 License for package Android SDK Build-Tools 33.0.1 accepted.
 Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
@@ -21,55 +387,157 @@ Preparing "Install Android SDK Build-Tools 33.0.1 v.33.0.1".
 Installing Android SDK Build-Tools 33.0.1 in /usr/local/share/android-sdk/build-tools/33.0.1
 "Install Android SDK Build-Tools 33.0.1 v.33.0.1" complete.
 "Install Android SDK Build-Tools 33.0.1 v.33.0.1" finished.
-Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/share/android-sdk/cmdline-tools/latest-2' (Expected '/usr/local/share/android-sdk/cmdline-tools/latest')
-> Task :clean UP-TO-DATE
-> Task :app:clean UP-TO-DATE
+
 > Task :app:preBuild UP-TO-DATE
 > Task :app:preDebugBuild UP-TO-DATE
 > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
-> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues
 > Task :app:checkDebugAarMetadata
 > Task :app:mapDebugSourceSetPaths
-> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:generateDebugResources
 > Task :app:packageDebugResources
-> Task :app:createDebugCompatibleScreenManifests
 > Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
-> Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
-> Task :app:desugarDebugFileDependencies
-> Task :app:mergeDebugJniLibFolders
 > Task :app:checkDebugDuplicateClasses
+> Task :app:desugarDebugFileDependencies
+> Task :app:processDebugManifestForPackage
+> Task :app:mergeLibDexDebug
+> Task :app:mergeExtDexDebug
+> Task :app:mergeDebugJniLibFolders
 > Task :app:mergeDebugNativeLibs NO-SOURCE
 > Task :app:stripDebugDebugSymbols NO-SOURCE
-> Task :app:mergeLibDexDebug
+> Task :app:processDebugResources FAILED
 > Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
-> Task :app:processDebugManifestForPackage
-> Task :app:processDebugResources
-> Task :app:mergeExtDexDebug
-> Task :app:kaptGenerateStubsDebugKotlin
-> Task :app:kaptDebugKotlin
-
-> Task :app:compileDebugKotlin FAILED
-e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:214:9 Unresolved reference: isGridVisible
-e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:236:59 Unresolved reference: snakeBodyColor
-e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:240:91 Unresolved reference: snakeHeadColor
-
-[Incubating] Problems report is available at: file:///home/builder/clone/build/reports/problems/problems-report.html
 
 FAILURE: Build failed with an exception.
 
 * What went wrong:
-Execution failed for task ':app:compileDebugKotlin'.
-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-   > Compilation error. See log for more details
+Execution failed for task ':app:processDebugResources'.
+> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+   > Android resource linking failed
+     unknown option '--legacy'.
+     
+     aapt2 link [options] -o arg --manifest arg files...
+     
+     Options:
+      -o arg                                            Output path.
+      --manifest arg                                    Path to the Android manifest to build.
+      -I arg                                            Adds an Android APK to link against.
+      -A arg                                            An assets directory to include in the APK. These are unprocessed.
+      -R arg                                            Compilation unit to link, using `overlay` semantics.
+                                                        The last conflicting resource given takes precedence.
+      --package-id arg                                  Specify the package ID to use for this app. Must be greater or equal to
+                                                        0x7f and can't be used with --static-lib or --shared-lib.
+      --java arg                                        Directory in which to generate R.java.
+      --proguard arg                                    Output file for generated Proguard rules.
+      --proguard-main-dex arg                           Output file for generated Proguard rules for the main dex.
+      --proguard-conditional-keep-rules                 Generate conditional Proguard keep rules.
+      --proguard-minimal-keep-rules                     Generate a minimal set of Proguard keep rules.
+      --no-auto-version                                 Disables automatic style and layout SDK versioning.
+      --no-version-vectors                              Disables automatic versioning of vector drawables. Use this only
+                                                        when building with vector drawable support library.
+      --no-version-transitions                          Disables automatic versioning of transition resources. Use this only
+                                                        when building with transition support library.
+      --no-resource-deduping                            Disables automatic deduping of resources with
+                                                        identical values across compatible configurations.
+      --no-resource-removal                             Disables automatic removal of resources without
+                                                        defaults. Use this only when building runtime resource overlay packages.
+      --enable-sparse-encoding                          This decreases APK size at the cost of resource retrieval performance.
+      --enable-compact-entries                          This decreases APK size by using compact resource entries for simple data types.
+      -x                                                Legacy flag that specifies to use the package identifier 0x01.
+      -z                                                Require localization of strings marked 'suggested'.
+      -c arg                                            Comma separated list of configurations to include. The default
+                                                        is all configurations.
+      --preferred-density arg                           Selects the closest matching density and strips out all others.
+      --product arg                                     Comma separated list of product names to keep
+      --output-to-dir                                   Outputs the APK contents to a directory specified by -o.
+      --no-xml-namespaces                               Removes XML namespace prefix and URI information
+                                                        from AndroidManifest.xml and XML binaries in res/*.
+      --min-sdk-version arg                             Default minimum SDK version to use for AndroidManifest.xml.
+      --target-sdk-version arg                          Default target SDK version to use for AndroidManifest.xml.
+      --version-code arg                                Version code (integer) to inject into the AndroidManifest.xml if none is
+                                                        present.
+      --version-code-major arg                          Version code major (integer) to inject into the AndroidManifest.xml if none is
+                                                        present.
+      --version-name arg                                Version name to inject into the AndroidManifest.xml if none is present.
+      --revision-code arg                               Revision code (integer) to inject into the AndroidManifest.xml if none is
+                                                        present.
+      --replace-version                                 If --version-code, --version-name, and/or --revision-code are specified, these
+                                                        values will replace any value already in the manifest. By
+                                                        default, nothing is changed if the manifest already defines
+                                                        these attributes.
+      --compile-sdk-version-code arg                    Version code (integer) to inject into the AndroidManifest.xml if none is
+                                                        present.
+      --compile-sdk-version-name arg                    Version name to inject into the AndroidManifest.xml if none is present.
+      --no-compile-sdk-metadata                         Suppresses output of compile SDK-related attributes in AndroidManifest.xml,
+                                                        including android:compileSdkVersion and platformBuildVersion.
+      --fingerprint-prefix arg                          Fingerprint prefix to add to install constraints.
+      --shared-lib                                      Generates a shared Android runtime library.
+      --static-lib                                      Generate a static Android library.
+      --proto-format                                    Generates compiled resources in Protobuf format.
+                                                        Suitable as input to the bundle tool for generating an App Bundle.
+      --no-static-lib-packages                          Merge all library resources under the app's package.
+      --non-final-ids                                   Generates R.java without the final modifier. This is implied when
+                                                        --static-lib is specified.
+      --no-proguard-location-reference                  Keep proguard rules files from having a reference to the source file
+      --stable-ids arg                                  File containing a list of name to ID mapping.
+      --emit-ids arg                                    Emit a file at the given path with a list of name to ID mappings,
+                                                        suitable for use with --stable-ids.
+      --private-symbols arg                             Package name to use when generating R.java for private symbols.
+                                                        If not specified, public and private symbols will use the application's
+                                                        package name.
+      --custom-package arg                              Custom Java package under which to generate R.java.
+      --extra-packages arg                              Generate the same R.java but with different package names.
+      --add-javadoc-annotation arg                      Adds a JavaDoc annotation to all generated Java classes.
+      --output-text-symbols arg                         Generates a text file containing the resource symbols of the R class in
+                                                        the specified folder.
+      --allow-reserved-package-id                       Allows the use of a reserved package ID. This should on be used for
+                                                        packages with a pre-O min-sdk
+                                                        
+      --auto-add-overlay                                Allows the addition of new resources in overlays without
+                                                        <add-resource> tags.
+      --override-styles-instead-of-overlaying           Causes styles defined in -R resources to replace previous definitions
+                                                        instead of merging into them
+                                                        
+      --rename-manifest-package arg                     Renames the package in AndroidManifest.xml.
+      --rename-resources-package arg                    Renames the package in resources table
+      --rename-instrumentation-target-package arg       Changes the name of the target package for instrumentation. Most useful
+                                                        when used in conjunction with --rename-manifest-package.
+      --rename-overlay-target-package arg               Changes the name of the target package for overlay. Most useful
+                                                        when used in conjunction with --rename-manifest-package.
+      --rename-overlay-category arg                     Changes the category for the overlay.
+      -0 arg                                            File suffix not to compress.
+      --no-compress                                     Do not compress any resources.
+      --keep-raw-values                                 Preserve raw attribute values in xml files.
+      --no-compress-regex arg                           Do not compress extensions matching the regular expression. Remember to
+                                                        use the '$' symbol for end of line. Uses a case-sensitive ECMAScriptregular expression grammar.
+      --warn-manifest-validation                        Treat manifest validation errors as warnings.
+      --split arg                                       Split resources matching a set of configs out to a Split APK.
+                                                        Syntax: path/to/output.apk:<config>[,<config>[...]].
+                                                        On Windows, use a semicolon ';' separator instead.
+      --exclude-configs arg                             Excludes values of resources whose configs contain the specified qualifiers.
+      --debug-mode                                      Inserts android:debuggable="true" in to the application node of the
+                                                        manifest, making the application debuggable even on production devices.
+      --strict-visibility                               Do not allow overlays with different visibility levels.
+      --exclude-sources                                 Do not serialize source file information when generating resources in
+                                                        Protobuf format.
+      --trace-folder arg                                Generate systrace json trace fragment to specified folder.
+      --merge-only                                      Only merge the resources, without verifying resource references. This flag
+                                                        should only be used together with the --static-lib flag.
+      -v                                                Enables verbose logging.
+      --feature-flags arg                               Placeholder, to be implemented.
+      -h                                                Displays this help menu
+
 
 * Try:
 > Run with --info or --debug option to get more log output.
@@ -77,12 +545,11 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Get more help at https://help.gradle.org.
 
 * Exception is:
-org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:compileDebugKotlin'.
-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
-	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
-	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:41)
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:processDebugResources'.
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:148)
+	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:282)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:146)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:134)
 	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
 	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
 	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
@@ -91,123 +558,124 @@ org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:com
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
 	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
-	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
-	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
-	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
-	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
-Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionException: A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-	at org.gradle.workers.internal.DefaultWorkerExecutor$WorkItemExecution.waitForCompletion(DefaultWorkerExecutor.java:287)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionException: A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+	at org.gradle.workers.internal.DefaultWorkerExecutor$WorkItemExecution.waitForCompletion(DefaultWorkerExecutor.java:283)
 	at org.gradle.internal.work.DefaultAsyncWorkTracker.lambda$waitForItemsAndGatherFailures$2(DefaultAsyncWorkTracker.java:130)
 	at org.gradle.internal.Factories$1.create(Factories.java:31)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLocks(DefaultWorkerLeaseService.java:335)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLocks(DefaultWorkerLeaseService.java:318)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLock(DefaultWorkerLeaseService.java:323)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLocks(DefaultWorkerLeaseService.java:336)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLocks(DefaultWorkerLeaseService.java:319)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withoutLock(DefaultWorkerLeaseService.java:324)
 	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForItemsAndGatherFailures(DefaultAsyncWorkTracker.java:126)
 	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForItemsAndGatherFailures(DefaultAsyncWorkTracker.java:92)
 	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForAll(DefaultAsyncWorkTracker.java:78)
 	at org.gradle.internal.work.DefaultAsyncWorkTracker.waitForCompletion(DefaultAsyncWorkTracker.java:66)
-	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:252)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:30)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:27)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:48)
-	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
-	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
-	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
-	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:256)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:233)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:216)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:199)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:166)
 	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
 	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
-	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
-	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
-	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
-	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
-	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
 	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
 	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
-	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
-	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
-	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
-	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:46)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:41)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:74)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.CreateOutputsStep.execute(CreateOutputsStep.java:50)
+	at org.gradle.internal.execution.steps.CreateOutputsStep.execute(CreateOutputsStep.java:28)
+	at org.gradle.internal.execution.steps.CaptureStateAfterExecutionStep.executeDelegateBroadcastingChanges(CaptureStateAfterExecutionStep.java:100)
+	at org.gradle.internal.execution.steps.CaptureStateAfterExecutionStep.execute(CaptureStateAfterExecutionStep.java:72)
+	at org.gradle.internal.execution.steps.CaptureStateAfterExecutionStep.execute(CaptureStateAfterExecutionStep.java:50)
 	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
 	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
-	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
-	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:179)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:70)
 	at org.gradle.internal.Either$Right.fold(Either.java:175)
-	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
-	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
-	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
-	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:46)
-	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:35)
-	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
-	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
-	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
-	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
-	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
-	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
-	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:49)
-	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:27)
-	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
-	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:59)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:68)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:25)
+	at org.gradle.internal.execution.steps.RecordOutputsStep.execute(RecordOutputsStep.java:36)
+	at org.gradle.internal.execution.steps.RecordOutputsStep.execute(RecordOutputsStep.java:22)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:91)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:55)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:55)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:37)
 	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
 	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
-	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:107)
-	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:56)
-	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
-	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
-	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
-	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:61)
-	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveCachingStateStep.execute(ResolveCachingStateStep.java:77)
+	at org.gradle.internal.execution.steps.ResolveCachingStateStep.execute(ResolveCachingStateStep.java:38)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:108)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:55)
+	at org.gradle.internal.execution.steps.CaptureStateBeforeExecutionStep.execute(CaptureStateBeforeExecutionStep.java:71)
+	at org.gradle.internal.execution.steps.CaptureStateBeforeExecutionStep.execute(CaptureStateBeforeExecutionStep.java:45)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.executeWithNonEmptySources(SkipEmptyWorkStep.java:177)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.execute(SkipEmptyWorkStep.java:81)
+	at org.gradle.internal.execution.steps.SkipEmptyWorkStep.execute(SkipEmptyWorkStep.java:53)
+	at org.gradle.internal.execution.steps.RemoveUntrackedExecutionStateStep.execute(RemoveUntrackedExecutionStateStep.java:32)
+	at org.gradle.internal.execution.steps.RemoveUntrackedExecutionStateStep.execute(RemoveUntrackedExecutionStateStep.java:21)
 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
 	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
 	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
-	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
-	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
-	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
-	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:289)
-	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
-	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
-	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
-	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
-	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
-	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
-	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
-	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
-	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
-	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
-	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+	at org.gradle.internal.execution.steps.CleanupStaleOutputsStep.execute(CleanupStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.CleanupStaleOutputsStep.execute(CleanupStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:38)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.lambda$execute$0(AssignWorkspaceStep.java:32)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:293)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.execute(AssignWorkspaceStep.java:30)
+	at org.gradle.internal.execution.steps.AssignWorkspaceStep.execute(AssignWorkspaceStep.java:21)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:37)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:27)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:47)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:34)
 	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:64)
-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:127)
-	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
-	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:41)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:145)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:134)
 	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
 	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
 	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
@@ -216,29 +684,152 @@ Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionExcept
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
 	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
-	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
-	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
-	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
-	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
-Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilation error. See log for more details
-	at org.jetbrains.kotlin.gradle.tasks.TasksUtilsKt.throwExceptionIfCompilationFailed(tasksUtils.kt:22)
-	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.run(GradleKotlinCompilerWork.kt:144)
-	at org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction.execute(GradleCompilerRunnerWithWorkers.kt:76)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: com.android.builder.internal.aapt.v2.Aapt2Exception: Android resource linking failed
+unknown option '--legacy'.
+
+aapt2 link [options] -o arg --manifest arg files...
+
+Options:
+ -o arg                                            Output path.
+ --manifest arg                                    Path to the Android manifest to build.
+ -I arg                                            Adds an Android APK to link against.
+ -A arg                                            An assets directory to include in the APK. These are unprocessed.
+ -R arg                                            Compilation unit to link, using `overlay` semantics.
+                                                   The last conflicting resource given takes precedence.
+ --package-id arg                                  Specify the package ID to use for this app. Must be greater or equal to
+                                                   0x7f and can't be used with --static-lib or --shared-lib.
+ --java arg                                        Directory in which to generate R.java.
+ --proguard arg                                    Output file for generated Proguard rules.
+ --proguard-main-dex arg                           Output file for generated Proguard rules for the main dex.
+ --proguard-conditional-keep-rules                 Generate conditional Proguard keep rules.
+ --proguard-minimal-keep-rules                     Generate a minimal set of Proguard keep rules.
+ --no-auto-version                                 Disables automatic style and layout SDK versioning.
+ --no-version-vectors                              Disables automatic versioning of vector drawables. Use this only
+                                                   when building with vector drawable support library.
+ --no-version-transitions                          Disables automatic versioning of transition resources. Use this only
+                                                   when building with transition support library.
+ --no-resource-deduping                            Disables automatic deduping of resources with
+                                                   identical values across compatible configurations.
+ --no-resource-removal                             Disables automatic removal of resources without
+                                                   defaults. Use this only when building runtime resource overlay packages.
+ --enable-sparse-encoding                          This decreases APK size at the cost of resource retrieval performance.
+ --enable-compact-entries                          This decreases APK size by using compact resource entries for simple data types.
+ -x                                                Legacy flag that specifies to use the package identifier 0x01.
+ -z                                                Require localization of strings marked 'suggested'.
+ -c arg                                            Comma separated list of configurations to include. The default
+                                                   is all configurations.
+ --preferred-density arg                           Selects the closest matching density and strips out all others.
+ --product arg                                     Comma separated list of product names to keep
+ --output-to-dir                                   Outputs the APK contents to a directory specified by -o.
+ --no-xml-namespaces                               Removes XML namespace prefix and URI information
+                                                   from AndroidManifest.xml and XML binaries in res/*.
+ --min-sdk-version arg                             Default minimum SDK version to use for AndroidManifest.xml.
+ --target-sdk-version arg                          Default target SDK version to use for AndroidManifest.xml.
+ --version-code arg                                Version code (integer) to inject into the AndroidManifest.xml if none is
+                                                   present.
+ --version-code-major arg                          Version code major (integer) to inject into the AndroidManifest.xml if none is
+                                                   present.
+ --version-name arg                                Version name to inject into the AndroidManifest.xml if none is present.
+ --revision-code arg                               Revision code (integer) to inject into the AndroidManifest.xml if none is
+                                                   present.
+ --replace-version                                 If --version-code, --version-name, and/or --revision-code are specified, these
+                                                   values will replace any value already in the manifest. By
+                                                   default, nothing is changed if the manifest already defines
+                                                   these attributes.
+ --compile-sdk-version-code arg                    Version code (integer) to inject into the AndroidManifest.xml if none is
+                                                   present.
+ --compile-sdk-version-name arg                    Version name to inject into the AndroidManifest.xml if none is present.
+ --no-compile-sdk-metadata                         Suppresses output of compile SDK-related attributes in AndroidManifest.xml,
+                                                   including android:compileSdkVersion and platformBuildVersion.
+ --fingerprint-prefix arg                          Fingerprint prefix to add to install constraints.
+ --shared-lib                                      Generates a shared Android runtime library.
+ --static-lib                                      Generate a static Android library.
+ --proto-format                                    Generates compiled resources in Protobuf format.
+                                                   Suitable as input to the bundle tool for generating an App Bundle.
+ --no-static-lib-packages                          Merge all library resources under the app's package.
+ --non-final-ids                                   Generates R.java without the final modifier. This is implied when
+                                                   --static-lib is specified.
+ --no-proguard-location-reference                  Keep proguard rules files from having a reference to the source file
+ --stable-ids arg                                  File containing a list of name to ID mapping.
+ --emit-ids arg                                    Emit a file at the given path with a list of name to ID mappings,
+                                                   suitable for use with --stable-ids.
+ --private-symbols arg                             Package name to use when generating R.java for private symbols.
+                                                   If not specified, public and private symbols will use the application's
+                                                   package name.
+ --custom-package arg                              Custom Java package under which to generate R.java.
+ --extra-packages arg                              Generate the same R.java but with different package names.
+ --add-javadoc-annotation arg                      Adds a JavaDoc annotation to all generated Java classes.
+ --output-text-symbols arg                         Generates a text file containing the resource symbols of the R class in
+                                                   the specified folder.
+ --allow-reserved-package-id                       Allows the use of a reserved package ID. This should on be used for
+                                                   packages with a pre-O min-sdk
+                                                   
+ --auto-add-overlay                                Allows the addition of new resources in overlays without
+                                                   <add-resource> tags.
+ --override-styles-instead-of-overlaying           Causes styles defined in -R resources to replace previous definitions
+                                                   instead of merging into them
+                                                   
+ --rename-manifest-package arg                     Renames the package in AndroidManifest.xml.
+ --rename-resources-package arg                    Renames the package in resources table
+ --rename-instrumentation-target-package arg       Changes the name of the target package for instrumentation. Most useful
+                                                   when used in conjunction with --rename-manifest-package.
+ --rename-overlay-target-package arg               Changes the name of the target package for overlay. Most useful
+                                                   when used in conjunction with --rename-manifest-package.
+ --rename-overlay-category arg                     Changes the category for the overlay.
+ -0 arg                                            File suffix not to compress.
+ --no-compress                                     Do not compress any resources.
+ --keep-raw-values                                 Preserve raw attribute values in xml files.
+ --no-compress-regex arg                           Do not compress extensions matching the regular expression. Remember to
+                                                   use the '$' symbol for end of line. Uses a case-sensitive ECMAScriptregular expression grammar.
+ --warn-manifest-validation                        Treat manifest validation errors as warnings.
+ --split arg                                       Split resources matching a set of configs out to a Split APK.
+                                                   Syntax: path/to/output.apk:<config>[,<config>[...]].
+                                                   On Windows, use a semicolon ';' separator instead.
+ --exclude-configs arg                             Excludes values of resources whose configs contain the specified qualifiers.
+ --debug-mode                                      Inserts android:debuggable="true" in to the application node of the
+                                                   manifest, making the application debuggable even on production devices.
+ --strict-visibility                               Do not allow overlays with different visibility levels.
+ --exclude-sources                                 Do not serialize source file information when generating resources in
+                                                   Protobuf format.
+ --trace-folder arg                                Generate systrace json trace fragment to specified folder.
+ --merge-only                                      Only merge the resources, without verifying resource references. This flag
+                                                   should only be used together with the --static-lib flag.
+ -v                                                Enables verbose logging.
+ --feature-flags arg                               Placeholder, to be implemented.
+ -h                                                Displays this help menu
+
+	at com.android.builder.internal.aapt.v2.Aapt2Exception$Companion.create(Aapt2Exception.kt:45)
+	at com.android.builder.internal.aapt.v2.Aapt2Exception$Companion.create$default(Aapt2Exception.kt:33)
+	at com.android.builder.internal.aapt.v2.Aapt2DaemonImpl.doLink(Aapt2DaemonImpl.kt:188)
+	at com.android.builder.internal.aapt.v2.Aapt2Daemon.link(Aapt2Daemon.kt:124)
+	at com.android.builder.internal.aapt.v2.Aapt2DaemonManager$LeasedAaptDaemon.link(Aapt2DaemonManager.kt:176)
+	at com.android.builder.internal.aapt.v2.Aapt2DaemonManager$leasingAapt2Daemon$1.link(Aapt2DaemonManager.kt:199)
+	at com.android.build.gradle.internal.services.PartialInProcessResourceProcessor.link(PartialInProcessResourceProcessor.kt:51)
+	at com.android.build.gradle.internal.res.Aapt2ProcessResourcesRunnableKt.processResources(Aapt2ProcessResourcesRunnable.kt:74)
+	at com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$Companion.invokeAaptForSplit(LinkApplicationAndroidResourcesTask.kt:941)
+	at com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$Companion.access$invokeAaptForSplit(LinkApplicationAndroidResourcesTask.kt:796)
+	at com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction.run(LinkApplicationAndroidResourcesTask.kt:431)
+	at com.android.build.gradle.internal.profile.ProfileAwareWorkAction.execute(ProfileAwareWorkAction.kt:74)
 	at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:63)
 	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:66)
 	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:62)
@@ -246,37 +837,79 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.lambda$execute$0(NoIsolationWorkerFactory.java:62)
 	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:44)
 	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:41)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
 	at org.gradle.workers.internal.AbstractWorker.executeWrappedInBuildOperation(AbstractWorker.java:41)
 	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.execute(NoIsolationWorkerFactory.java:59)
-	at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$0(DefaultWorkerExecutor.java:174)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:194)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$700(DefaultConditionalExecutionQueue.java:127)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:169)
+	at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$0(DefaultWorkerExecutor.java:170)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:187)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$700(DefaultConditionalExecutionQueue.java:120)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:162)
 	at org.gradle.internal.Factories$1.create(Factories.java:31)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:263)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:127)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:132)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:164)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:133)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:133)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:157)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:126)
 	... 2 more
+	Suppressed: java.lang.NullPointerException: Parameter specified as non-null is null: method com.android.ide.common.resources.RelativeResourceUtils.getRelativeSourceSetPath, parameter resourceFile
+		at com.android.ide.common.resources.RelativeResourceUtils.getRelativeSourceSetPath(RelativeResourceUtils.kt)
+		at com.android.ide.common.blame.MergingLog.getPositionMap(MergingLog.java:229)
+		at com.android.ide.common.blame.MergingLog.find(MergingLog.java:213)
+		at com.android.build.gradle.internal.res.Aapt2ErrorUtils$rewriteLinkException$2.invoke(Aapt2ErrorUtils.kt:136)
+		at com.android.build.gradle.internal.res.Aapt2ErrorUtils$rewriteLinkException$2.invoke(Aapt2ErrorUtils.kt:133)
+		at com.android.build.gradle.internal.res.Aapt2ErrorUtils.rewritePositions(Aapt2ErrorUtils.kt:278)
+		at com.android.build.gradle.internal.res.Aapt2ErrorUtils.rewriteException(Aapt2ErrorUtils.kt:235)
+		at com.android.build.gradle.internal.res.Aapt2ErrorUtils.rewriteLinkException(Aapt2ErrorUtils.kt:133)
+		at com.android.build.gradle.internal.res.Aapt2ProcessResourcesRunnableKt.processResources(Aapt2ProcessResourcesRunnable.kt:76)
+		at com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$Companion.invokeAaptForSplit(LinkApplicationAndroidResourcesTask.kt:941)
+		at com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$Companion.access$invokeAaptForSplit(LinkApplicationAndroidResourcesTask.kt:796)
+		at com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction.run(LinkApplicationAndroidResourcesTask.kt:431)
+		at com.android.build.gradle.internal.profile.ProfileAwareWorkAction.execute(ProfileAwareWorkAction.kt:74)
+		at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:63)
+		at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:66)
+		at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:62)
+		at org.gradle.internal.classloader.ClassLoaderUtils.executeInClassloader(ClassLoaderUtils.java:100)
+		at org.gradle.workers.internal.NoIsolationWorkerFactory$1.lambda$execute$0(NoIsolationWorkerFactory.java:62)
+		at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:44)
+		at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:41)
+		at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+		at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+		at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+		at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+		at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+		at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+		at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+		at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
+		at org.gradle.workers.internal.AbstractWorker.executeWrappedInBuildOperation(AbstractWorker.java:41)
+		at org.gradle.workers.internal.NoIsolationWorkerFactory$1.execute(NoIsolationWorkerFactory.java:59)
+		at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$0(DefaultWorkerExecutor.java:170)
+		at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+		at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:187)
+		at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$700(DefaultConditionalExecutionQueue.java:120)
+		at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:162)
+		at org.gradle.internal.Factories$1.create(Factories.java:31)
+		at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
+		at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
+		at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:133)
+		at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:157)
+		at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:126)
+		at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+		at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+		at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+		at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+		at java.base/java.lang.Thread.run(Thread.java:840)
 
 
-Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
-
-You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
-
-For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
-
-BUILD FAILED in 1m 42s
-28 actionable tasks: 26 executed, 2 up-to-date
-
-
-Build failed :|
-Step 6 script `Build APK with Gradle` exited with status code 1
+BUILD FAILED in 1m 29s
+22 actionable tasks: 22 executed
++ echo '=== Build Attempt Finished ==='
+=== Build Attempt Finished ===

@@ -22,6 +22,80 @@
 
 ## Build Fixes History
 
+### Fix #13: AAPT2 Legacy Option Compatibility - Wrong Repository Build Issue
+**Date:** 2025-01-06 00:35 UTC  
+**Commit:** [PENDING]  
+
+**Error:**
+```
+> Task :app:processDebugResources FAILED
+Execution failed for task ':app:processDebugResources'.
+> Android resource linking failed
+  unknown option '--legacy'.
+  
+WARNING: The option setting 'android.aapt2Version=8.6.1-11315950' is experimental.
+```
+
+**Critical Discovery:**  
+**CODEMAGIC BUILDING WRONG REPOSITORY** - After extensive analysis, discovered CodeMagic is building from a completely different snake game project instead of our Advanced Snake Game:
+
+**Evidence of Wrong Repository:**
+- ❌ **CodeMagic Building**: Package `com.termux.snake` with old files (`GameView.kt`, `MainActivity.kt`, `Snake.kt`)
+- ✅ **Our Repository**: Package `com.advancedsnake` with modern Jetpack Compose architecture
+- ❌ **Build Environment**: Old View-based Android project structure
+- ✅ **GitHub Verified**: Correct Compose-based project is in repository
+
+**Technical Error Analysis:**
+The specific AAPT2 error `unknown option '--legacy'` occurs when:
+1. **AAPT2 Version Mismatch**: Experimental AAPT2 version `8.6.1-11315950` doesn't support legacy flags
+2. **Build Tools Compatibility**: Android Gradle Plugin trying to use deprecated AAPT2 options
+3. **CodeMagic Environment**: Using incompatible build tool versions
+
+**Root Cause:**  
+**DUAL ISSUE** - Both repository configuration problem AND AAPT2 compatibility issue:
+1. **Repository Issue**: CodeMagic pointing to wrong snake game project
+2. **AAPT2 Issue**: Experimental AAPT2 version incompatibility with legacy options
+
+**Solution Applied:**  
+**AAPT2 Compatibility Fix** - Removed experimental AAPT2 version setting:
+
+**gradle.properties changes:**
+```properties
+# Fix for AAPT2 legacy option compatibility - Fix #13
+# Remove experimental AAPT2 version that doesn't support --legacy flag
+android.aapt2Version=
+```
+
+**Files Modified:**
+- `gradle.properties` (lines 37-39) - Added AAPT2 compatibility fix
+
+**Critical Learning:**  
+**ALWAYS VERIFY REPOSITORY IDENTITY** - This issue demonstrates the importance of verifying that CI/CD systems are building the correct repository. The error appeared to be a compilation issue but was actually a fundamental repository configuration problem.
+
+**Next Steps Required:**
+1. **Verify CodeMagic Repository Configuration** - Ensure CodeMagic is pointing to correct repository
+2. **Confirm Branch Settings** - Verify CodeMagic is building from correct branch
+3. **Test AAPT2 Compatibility** - Verify the empty AAPT2 version setting resolves legacy option errors
+
+**Repository Verification Commands:**
+```bash
+# Verify correct repository structure
+gh api repos/jdhinman/AdvancedSnakeGame/contents/app/src/main/java/com
+
+# Should show: {"name":"advancedsnake",...} (NOT "termux")
+```
+
+**Prevention Strategy:**  
+**CI/CD Repository Verification** - Always verify CI/CD systems are building the correct repository by checking:
+- Package names in build logs
+- File structure listings
+- Commit hashes and recent changes
+
+**Architecture Rule Established:**  
+**CI/CD VERIFICATION PROTOCOL** - Before debugging compilation errors, always verify the CI/CD system is building the correct repository and branch with the expected file structure.
+
+---
+
 ### Fix #12: NUCLEAR Cache Persistence - EXTREME Cache-Busting Required
 **Date:** 2025-01-06 00:22 UTC  
 **Commit:** c865ee2  
