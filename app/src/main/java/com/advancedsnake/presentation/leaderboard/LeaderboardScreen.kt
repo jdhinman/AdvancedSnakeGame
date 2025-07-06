@@ -1,5 +1,7 @@
 package com.advancedsnake.presentation.leaderboard
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +28,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.advancedsnake.R
 import com.advancedsnake.domain.entities.Score
+import com.advancedsnake.presentation.theme.*
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,259 +38,265 @@ fun LeaderboardScreen(
     viewModel: LeaderboardViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var isVisible by remember { mutableStateOf(false) }
+    
+    LaunchedEffect(Unit) {
+        delay(300)
+        isVisible = true
+    }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.extendedColors.gradientStart,
+                        MaterialTheme.extendedColors.gradientMid,
+                        MaterialTheme.extendedColors.gradientEnd
+                    )
+                )
+            )
     ) {
-        // Top App Bar
-        TopAppBar(
-            title = { Text(stringResource(R.string.leaderboard)) },
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-            },
-            actions = {
-                if (uiState.scores.isNotEmpty()) {
-                    IconButton(onClick = viewModel::showClearDialog) {
-                        Icon(Icons.Default.Delete, contentDescription = "Clear scores")
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Enhanced Top App Bar
+            TopAppBar(
+                title = { 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = GameIcons.Leaderboard.trophy,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Text(
+                            text = stringResource(R.string.leaderboard),
+                            style = MaterialTheme.typography.extended.settingsSection,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                },
+                navigationIcon = {
+                    AnimatedIconButton(
+                        onClick = { navController.popBackStack() },
+                        icon = Icons.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                },
+                actions = {
+                    if (uiState.scores.isNotEmpty()) {
+                        AnimatedIconButton(
+                            onClick = viewModel::showClearDialog,
+                            icon = GameIcons.Leaderboard.clear,
+                            contentDescription = "Clear scores",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                )
+            )
+
+            if (uiState.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        PulsingIndicator(
+                            size = 48.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Loading Leaderboard...",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 }
-            }
-        )
-
-        if (uiState.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        } else if (uiState.scores.isEmpty()) {
-            EmptyLeaderboard()
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                // Statistics card
-                item {
-                    StatisticsCard(
-                        totalGames = uiState.totalGamesPlayed,
-                        averageScore = uiState.averageScore,
-                        highestScore = uiState.scores.firstOrNull()?.score ?: 0
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
+            } else if (uiState.scores.isEmpty()) {
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(animationSpec = tween(600)) + slideInFromBottom()
+                ) {
+                    EnhancedEmptyLeaderboard(showAnimation = true)
                 }
+            } else {
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(animationSpec = tween(600)) + slideInFromBottom()
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        // Enhanced Statistics card
+                        item {
+                            EnhancedStatisticsCard(
+                                totalGames = uiState.totalGamesPlayed,
+                                averageScore = uiState.averageScore,
+                                highestScore = uiState.scores.firstOrNull()?.score ?: 0,
+                                showAnimations = true
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                        
+                        // Achievement progress section
+                        item {
+                            AchievementSection(
+                                scores = uiState.scores,
+                                totalGames = uiState.totalGamesPlayed
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
 
-                // Score items
-                itemsIndexed(uiState.scores) { index, score ->
-                    ScoreItem(
-                        rank = index + 1,
-                        score = score,
-                        isTopThree = index < 3
-                    )
+                        // Enhanced Score items
+                        itemsIndexed(uiState.scores) { index, score ->
+                            EnhancedLeaderboardEntry(
+                                rank = index + 1,
+                                playerName = score.playerName,
+                                score = score.score,
+                                gameDetails = "Snake length: ${score.snakeLength} • ${score.gameSpeedLevel}",
+                                timeDetails = "${score.relativeTime} • ${score.formattedDuration}",
+                                isTopThree = index < 3,
+                                showEntryAnimation = true,
+                                animationDelay = index * 100
+                            )
+                        }
+                        
+                        // Bottom padding
+                        item {
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
+                    }
                 }
             }
         }
     }
 
-    // Clear confirmation dialog
+    // Enhanced Clear confirmation dialog
     if (uiState.showClearDialog) {
         AlertDialog(
             onDismissRequest = viewModel::hideClearDialog,
-            title = { Text("Clear All Scores") },
-            text = { Text("Are you sure you want to clear all scores? This action cannot be undone.") },
-            confirmButton = {
-                TextButton(onClick = viewModel::clearAllScores) {
-                    Text("Clear")
+            title = { 
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = GameIcons.Leaderboard.clear,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        "Clear All Scores",
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
             },
+            text = { 
+                Text(
+                    "Are you sure you want to clear all scores? This will permanently delete your leaderboard history and cannot be undone.",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            confirmButton = {
+                AnimatedButton(
+                    onClick = viewModel::clearAllScores,
+                    text = "Clear All",
+                    icon = GameIcons.Leaderboard.clear
+                )
+            },
             dismissButton = {
-                TextButton(onClick = viewModel::hideClearDialog) {
-                    Text("Cancel")
-                }
-            }
+                AnimatedButton(
+                    onClick = viewModel::hideClearDialog,
+                    text = "Cancel",
+                    icon = GameIcons.UI.cancel
+                )
+            },
+            shape = MaterialTheme.shapes.extended.dialogMedium
         )
     }
 }
 
 @Composable
-private fun EmptyLeaderboard() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+private fun AchievementSection(
+    scores: List<Score>,
+    totalGames: Int
+) {
+    AnimatedCard(
+        elevation = 6.dp,
+        shape = MaterialTheme.shapes.extended.achievementCard,
+        backgroundColor = MaterialTheme.extendedColors.elevationSurface2
     ) {
-        Icon(
-            Icons.Default.Star,
-            contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            tint = MaterialTheme.colorScheme.primary
+        Text(
+            text = "Achievement Progress",
+            style = MaterialTheme.typography.extended.achievementTitle,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold
         )
         
         Spacer(modifier = Modifier.height(16.dp))
         
-        Text(
-            text = "No High Scores Yet!",
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        Text(
-            text = "Play your first game to set the record!",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-private fun StatisticsCard(
-    totalGames: Int,
-    averageScore: Double,
-    highestScore: Int
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = "Game Statistics",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+            // First Score achievement
+            AchievementProgress(
+                title = "First Steps",
+                description = "Play your first game",
+                currentProgress = if (totalGames > 0) 1 else 0,
+                maxProgress = 1,
+                icon = GameIcons.Achievement.milestone,
+                isUnlocked = totalGames > 0,
+                showAnimation = true
             )
             
-            Spacer(modifier = Modifier.height(12.dp))
+            // 10 Games achievement
+            AchievementProgress(
+                title = "Getting Started",
+                description = "Play 10 games",
+                currentProgress = totalGames.coerceAtMost(10),
+                maxProgress = 10,
+                icon = GameIcons.Achievement.progress,
+                isUnlocked = totalGames >= 10,
+                showAnimation = true
+            )
             
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                StatisticItem(
-                    label = "Games Played",
-                    value = totalGames.toString()
-                )
-                StatisticItem(
-                    label = "Average Score",
-                    value = String.format("%.1f", averageScore)
-                )
-                StatisticItem(
-                    label = "Best Score",
-                    value = highestScore.toString()
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun StatisticItem(label: String, value: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
-private fun ScoreItem(
-    rank: Int,
-    score: Score,
-    isTopThree: Boolean
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isTopThree) 6.dp else 2.dp
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isTopThree) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surface
-            }
-        )
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Rank indicator
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(
-                        if (isTopThree) {
-                            when (rank) {
-                                1 -> Color(0xFFFFD700) // Gold
-                                2 -> Color(0xFFC0C0C0) // Silver
-                                3 -> Color(0xFFCD7F32) // Bronze
-                                else -> MaterialTheme.colorScheme.secondary
-                            }
-                        } else {
-                            MaterialTheme.colorScheme.secondary
-                        }
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = rank.toString(),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-            }
+            // High Score achievement
+            val highestScore = scores.firstOrNull()?.score ?: 0
+            AchievementProgress(
+                title = "High Achiever",
+                description = "Reach a score of 100",
+                currentProgress = highestScore.coerceAtMost(100),
+                maxProgress = 100,
+                icon = GameIcons.Achievement.gold,
+                isUnlocked = highestScore >= 100,
+                showAnimation = true
+            )
             
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            // Player info
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = score.playerName,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "${score.relativeTime} • ${score.formattedDuration}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "Snake length: ${score.snakeLength} • ${score.gameSpeedLevel}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            
-            // Score
-            Text(
-                text = score.score.toString(),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+            // Top 3 achievement  
+            val topThreeCount = scores.take(3).size
+            AchievementProgress(
+                title = "Podium Finish",
+                description = "Get 3 scores in the leaderboard",
+                currentProgress = topThreeCount,
+                maxProgress = 3,
+                icon = GameIcons.Leaderboard.medal,
+                isUnlocked = topThreeCount >= 3,
+                showAnimation = true
             )
         }
     }
 }
+

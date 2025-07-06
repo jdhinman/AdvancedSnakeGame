@@ -1,5 +1,7 @@
 package com.advancedsnake.presentation.settings
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -25,6 +28,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.advancedsnake.R
 import com.advancedsnake.domain.entities.*
+import com.advancedsnake.presentation.theme.*
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,172 +38,395 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var isVisible by remember { mutableStateOf(false) }
+    
+    LaunchedEffect(Unit) {
+        delay(300)
+        isVisible = true
+    }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.extendedColors.gradientStart,
+                        MaterialTheme.extendedColors.gradientMid,
+                        MaterialTheme.extendedColors.gradientEnd
+                    )
+                )
+            )
     ) {
-        // Top App Bar
-        TopAppBar(
-            title = { Text(stringResource(R.string.settings)) },
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Enhanced Top App Bar
+            TopAppBar(
+                title = { 
+                    Text(
+                        text = stringResource(R.string.settings),
+                        style = MaterialTheme.typography.extended.settingsSection,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
+                navigationIcon = {
+                    AnimatedIconButton(
+                        onClick = { navController.popBackStack() },
+                        icon = Icons.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                },
+                actions = {
+                    AnimatedIconButton(
+                        onClick = viewModel::showResetDialog,
+                        icon = GameIcons.Settings.reset,
+                        contentDescription = "Reset to defaults"
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                )
+            )
+
+            if (uiState.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        PulsingIndicator(
+                            size = 48.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Loading Settings...",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
-            },
-            actions = {
-                IconButton(onClick = viewModel::showResetDialog) {
-                    Icon(Icons.Default.Refresh, contentDescription = "Reset to defaults")
+            } else {
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(animationSpec = tween(600)) + slideInFromBottom()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        // Player Settings
+                        EnhancedPlayerSettingsSection(
+                            settings = uiState.settings,
+                            onSettingsChange = viewModel::updateSettings
+                        )
+
+                        // Gameplay Settings
+                        EnhancedGameplaySettingsSection(
+                            settings = uiState.settings,
+                            onSettingsChange = viewModel::updateSettings
+                        )
+
+                        // Audio & Feedback Settings
+                        EnhancedAudioSettingsSection(
+                            settings = uiState.settings,
+                            onSettingsChange = viewModel::updateSettings
+                        )
+
+                        // Visual Settings
+                        EnhancedVisualSettingsSection(
+                            settings = uiState.settings,
+                            onSettingsChange = viewModel::updateSettings
+                        )
+
+                        // Display Settings
+                        EnhancedDisplaySettingsSection(
+                            settings = uiState.settings,
+                            onSettingsChange = viewModel::updateSettings
+                        )
+                        
+                        // Add some bottom padding for scroll
+                        Spacer(modifier = Modifier.height(32.dp))
+                    }
                 }
-            }
-        )
-
-        if (uiState.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                // Player Settings
-                PlayerSettingsSection(
-                    settings = uiState.settings,
-                    onSettingsChange = viewModel::updateSettings
-                )
-
-                // Gameplay Settings
-                GameplaySettingsSection(
-                    settings = uiState.settings,
-                    onSettingsChange = viewModel::updateSettings
-                )
-
-                // Audio & Feedback Settings
-                AudioSettingsSection(
-                    settings = uiState.settings,
-                    onSettingsChange = viewModel::updateSettings
-                )
-
-                // Visual Settings
-                VisualSettingsSection(
-                    settings = uiState.settings,
-                    onSettingsChange = viewModel::updateSettings
-                )
-
-                // Display Settings
-                DisplaySettingsSection(
-                    settings = uiState.settings,
-                    onSettingsChange = viewModel::updateSettings
-                )
             }
         }
     }
 
-    // Reset confirmation dialog
+    // Enhanced Reset confirmation dialog
     if (uiState.showResetDialog) {
         AlertDialog(
             onDismissRequest = viewModel::hideResetDialog,
-            title = { Text("Reset Settings") },
-            text = { Text("Reset all settings to their default values? This action cannot be undone.") },
-            confirmButton = {
-                TextButton(onClick = viewModel::resetToDefaults) {
-                    Text("Reset")
+            title = { 
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = GameIcons.Settings.reset,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        "Reset Settings",
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
             },
+            text = { 
+                Text(
+                    "Reset all settings to their default values? This action cannot be undone.",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            confirmButton = {
+                AnimatedButton(
+                    onClick = viewModel::resetToDefaults,
+                    text = "Reset",
+                    icon = GameIcons.Settings.reset
+                )
+            },
             dismissButton = {
-                TextButton(onClick = viewModel::hideResetDialog) {
-                    Text("Cancel")
-                }
-            }
+                AnimatedButton(
+                    onClick = viewModel::hideResetDialog,
+                    text = "Cancel",
+                    icon = GameIcons.UI.cancel
+                )
+            },
+            shape = MaterialTheme.shapes.extended.dialogMedium
         )
-    }
-}
-
-@Composable
-private fun SettingsSection(
-    title: String,
-    content: @Composable () -> Unit
-) {
-    Column {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                content()
-            }
-        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlayerSettingsSection(
+private fun EnhancedPlayerSettingsSection(
     settings: GameSettings,
     onSettingsChange: (GameSettings) -> Unit
 ) {
-    SettingsSection(title = "Player") {
-        OutlinedTextField(
+    EnhancedSettingsSection(
+        title = "Player",
+        icon = GameIcons.Settings.player,
+        subtitle = "Customize your player profile"
+    ) {
+        EnhancedTextFieldSetting(
+            title = "Player Name",
             value = settings.playerName,
             onValueChange = { newName ->
                 onSettingsChange(settings.copy(playerName = newName.take(10)))
             },
-            label = { Text("Player Name") },
-            supportingText = { Text("Used in leaderboard (max 10 characters)") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            icon = GameIcons.Settings.player,
+            description = "Your name displayed on the leaderboard",
+            placeholder = "Enter your name",
+            maxLength = 10,
+            supportingText = "Used in leaderboard rankings"
         )
     }
 }
 
 @Composable
-private fun GameplaySettingsSection(
+private fun EnhancedGameplaySettingsSection(
     settings: GameSettings,
     onSettingsChange: (GameSettings) -> Unit
 ) {
-    SettingsSection(title = "Gameplay") {
+    EnhancedSettingsSection(
+        title = "Gameplay",
+        icon = GameIcons.Settings.gamepad,
+        subtitle = "Configure game mechanics and controls"
+    ) {
         // Game Speed
-        SettingItem(title = "Game Speed", description = "Controls snake movement speed") {
-            Column(modifier = Modifier.selectableGroup()) {
-                GameSpeed.values().forEach { speed ->
+        EnhancedRadioGroupSetting(
+            title = "Game Speed",
+            description = "Controls how fast the snake moves",
+            icon = GameIcons.Snake.speed,
+            options = GameSpeed.values().toList(),
+            selectedOption = settings.gameSpeed,
+            onOptionSelected = { onSettingsChange(settings.copy(gameSpeed = it)) },
+            optionDisplay = { it.displayName },
+            optionDescription = { "Start: ${it.baseSpeedMs}ms, Min: ${it.minSpeedMs}ms" }
+        )
+
+        // Board Size
+        EnhancedRadioGroupSetting(
+            title = "Board Size",
+            description = "Dimensions of the game playing field",
+            icon = GameIcons.Snake.board,
+            options = BoardSize.values().toList(),
+            selectedOption = settings.boardSize,
+            onOptionSelected = { onSettingsChange(settings.copy(boardSize = it)) },
+            optionDisplay = { "${it.displayName} (${it.width}×${it.height})" },
+            optionDescription = { 
+                when (it) {
+                    BoardSize.SMALL -> "Perfect for quick games"
+                    BoardSize.MEDIUM -> "Balanced gameplay experience"
+                    BoardSize.LARGE -> "Extended gameplay sessions"
+                }
+            }
+        )
+
+        // Control Sensitivity
+        EnhancedSliderSetting(
+            title = "Control Sensitivity",
+            value = settings.controlSensitivity,
+            onValueChange = { onSettingsChange(settings.copy(controlSensitivity = it)) },
+            valueRange = 0.5f..2.0f,
+            steps = 5,
+            icon = GameIcons.Snake.direction,
+            description = "How sensitive swipe gestures are",
+            minLabel = "Low",
+            maxLabel = "High",
+            valueFormatter = { 
+                when {
+                    it <= 0.8f -> "Low"
+                    it <= 1.2f -> "Normal" 
+                    it <= 1.6f -> "High"
+                    else -> "Very High"
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun EnhancedAudioSettingsSection(
+    settings: GameSettings,
+    onSettingsChange: (GameSettings) -> Unit
+) {
+    EnhancedSettingsSection(
+        title = "Audio & Feedback",
+        icon = GameIcons.Settings.audio,
+        subtitle = "Sound effects and haptic feedback options"
+    ) {
+        EnhancedSwitchSetting(
+            title = "Sound Effects",
+            description = "Play audio feedback during gameplay events",
+            checked = settings.soundEffectsEnabled,
+            onCheckedChange = { onSettingsChange(settings.copy(soundEffectsEnabled = it)) },
+            icon = getAudioIcon(settings.soundEffectsEnabled)
+        )
+
+        EnhancedSwitchSetting(
+            title = "Vibration",
+            description = "Haptic feedback for collisions and food consumption",
+            checked = settings.vibrationEnabled,
+            onCheckedChange = { onSettingsChange(settings.copy(vibrationEnabled = it)) },
+            icon = GameIcons.Settings.vibration
+        )
+        
+        // Audio preview
+        SettingsPreview(
+            title = "Audio Preview",
+            backgroundColor = MaterialTheme.extendedColors.elevationSurface3
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (settings.soundEffectsEnabled) GameIcons.Settings.audio else GameIcons.Settings.audioOff,
+                    contentDescription = null,
+                    tint = if (settings.soundEffectsEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp)
+                )
+                Text(
+                    text = if (settings.soundEffectsEnabled) "Audio Enabled" else "Audio Disabled",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                if (settings.vibrationEnabled) {
+                    Icon(
+                        imageVector = GameIcons.Settings.vibration,
+                        contentDescription = "Vibration enabled",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EnhancedVisualSettingsSection(
+    settings: GameSettings,
+    onSettingsChange: (GameSettings) -> Unit
+) {
+    EnhancedSettingsSection(
+        title = "Visual",
+        icon = GameIcons.Settings.visual,
+        subtitle = "Customize the game's appearance"
+    ) {
+        // Snake Theme
+        EnhancedRadioGroupSetting(
+            title = "Snake Theme",
+            description = "Choose your snake's color scheme",
+            icon = GameIcons.Snake.theme,
+            options = SnakeTheme.values().toList(),
+            selectedOption = settings.snakeTheme,
+            onOptionSelected = { onSettingsChange(settings.copy(snakeTheme = it)) },
+            optionDisplay = { it.displayName },
+            optionDescription = { "Head and body color combination" }
+        )
+
+        EnhancedSwitchSetting(
+            title = "Show Grid",
+            description = "Display grid lines to help navigate the board",
+            checked = settings.showGrid,
+            onCheckedChange = { onSettingsChange(settings.copy(showGrid = it)) },
+            icon = GameIcons.Snake.grid
+        )
+        
+        // Visual preview
+        SettingsPreview(
+            title = "Theme Preview",
+            backgroundColor = MaterialTheme.extendedColors.elevationSurface3
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Snake preview with selected theme
+                ColorPreview(
+                    colors = listOf(
+                        Color(android.graphics.Color.parseColor(settings.snakeTheme.headColorHex)),
+                        Color(android.graphics.Color.parseColor(settings.snakeTheme.bodyColorHex))
+                    ),
+                    size = 24.dp,
+                    spacing = 2.dp
+                )
+                
+                Column {
+                    Text(
+                        text = settings.snakeTheme.displayName,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .selectable(
-                                selected = (speed == settings.gameSpeed),
-                                onClick = { onSettingsChange(settings.copy(gameSpeed = speed)) },
-                                role = Role.RadioButton
-                            )
-                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RadioButton(
-                            selected = (speed == settings.gameSpeed),
-                            onClick = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Column {
-                            Text(text = speed.displayName)
+                        if (settings.showGrid) {
+                            Icon(
+                                imageVector = GameIcons.Snake.grid,
+                                contentDescription = "Grid enabled",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(16.dp)
+                            )
                             Text(
-                                text = "Start: ${speed.baseSpeedMs}ms, Min: ${speed.minSpeedMs}ms",
+                                text = "Grid enabled",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        } else {
+                            Text(
+                                text = "Grid disabled",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -207,200 +435,49 @@ private fun GameplaySettingsSection(
                 }
             }
         }
-
-        // Board Size
-        SettingItem(title = "Board Size", description = "Game board dimensions") {
-            Column(modifier = Modifier.selectableGroup()) {
-                BoardSize.values().forEach { size ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .selectable(
-                                selected = (size == settings.boardSize),
-                                onClick = { onSettingsChange(settings.copy(boardSize = size)) },
-                                role = Role.RadioButton
-                            )
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (size == settings.boardSize),
-                            onClick = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "${size.displayName} (${size.width}×${size.height})")
-                    }
-                }
-            }
-        }
-
-        // Control Sensitivity
-        SettingItem(title = "Control Sensitivity", description = "Swipe gesture sensitivity") {
-            Column {
-                Slider(
-                    value = settings.controlSensitivity,
-                    onValueChange = { onSettingsChange(settings.copy(controlSensitivity = it)) },
-                    valueRange = 0.5f..2.0f,
-                    steps = 5
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("Low", style = MaterialTheme.typography.bodySmall)
-                    Text("High", style = MaterialTheme.typography.bodySmall)
-                }
-            }
-        }
     }
 }
 
 @Composable
-private fun AudioSettingsSection(
+private fun EnhancedDisplaySettingsSection(
     settings: GameSettings,
     onSettingsChange: (GameSettings) -> Unit
 ) {
-    SettingsSection(title = "Audio & Feedback") {
-        SwitchSettingItem(
-            title = "Sound Effects",
-            description = "Play sound effects during gameplay",
-            checked = settings.soundEffectsEnabled,
-            onCheckedChange = { onSettingsChange(settings.copy(soundEffectsEnabled = it)) }
-        )
-
-        SwitchSettingItem(
-            title = "Vibration",
-            description = "Haptic feedback on collision and food consumption",
-            checked = settings.vibrationEnabled,
-            onCheckedChange = { onSettingsChange(settings.copy(vibrationEnabled = it)) }
-        )
-    }
-}
-
-@Composable
-private fun VisualSettingsSection(
-    settings: GameSettings,
-    onSettingsChange: (GameSettings) -> Unit
-) {
-    SettingsSection(title = "Visual") {
-        // Snake Theme
-        SettingItem(title = "Snake Theme", description = "Snake color scheme") {
-            Column(modifier = Modifier.selectableGroup()) {
-                SnakeTheme.values().forEach { theme ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .selectable(
-                                selected = (theme == settings.snakeTheme),
-                                onClick = { onSettingsChange(settings.copy(snakeTheme = theme)) },
-                                role = Role.RadioButton
-                            )
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (theme == settings.snakeTheme),
-                            onClick = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = theme.displayName)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        // Color preview
-                        Box(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clip(RoundedCornerShape(2.dp))
-                                .background(Color(android.graphics.Color.parseColor(theme.headColorHex)))
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Box(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clip(RoundedCornerShape(2.dp))
-                                .background(Color(android.graphics.Color.parseColor(theme.bodyColorHex)))
-                        )
-                    }
-                }
-            }
-        }
-
-        SwitchSettingItem(
-            title = "Show Grid",
-            description = "Display grid lines on game board",
-            checked = settings.showGrid,
-            onCheckedChange = { onSettingsChange(settings.copy(showGrid = it)) }
-        )
-    }
-}
-
-@Composable
-private fun DisplaySettingsSection(
-    settings: GameSettings,
-    onSettingsChange: (GameSettings) -> Unit
-) {
-    SettingsSection(title = "Display") {
-        SwitchSettingItem(
-            title = "Keep Screen On",
-            description = "Prevent screen from turning off during gameplay",
-            checked = settings.keepScreenOn,
-            onCheckedChange = { onSettingsChange(settings.copy(keepScreenOn = it)) }
-        )
-    }
-}
-
-@Composable
-private fun SettingItem(
-    title: String,
-    description: String? = null,
-    content: @Composable () -> Unit
-) {
-    Column {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Medium
-        )
-        if (description != null) {
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-        content()
-    }
-}
-
-@Composable
-private fun SwitchSettingItem(
-    title: String,
-    description: String? = null,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    EnhancedSettingsSection(
+        title = "Display",
+        icon = GameIcons.Settings.display,
+        subtitle = "Screen and display preferences"
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Medium
-            )
-            if (description != null) {
+        EnhancedSwitchSetting(
+            title = "Keep Screen On",
+            description = "Prevent screen from turning off during gameplay sessions",
+            checked = settings.keepScreenOn,
+            onCheckedChange = { onSettingsChange(settings.copy(keepScreenOn = it)) },
+            icon = GameIcons.Settings.display
+        )
+        
+        // Display preview
+        SettingsPreview(
+            title = "Display Status",
+            backgroundColor = MaterialTheme.extendedColors.elevationSurface3
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (settings.keepScreenOn) GameIcons.Status.active else GameIcons.Status.inactive,
+                    contentDescription = null,
+                    tint = if (settings.keepScreenOn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp)
+                )
                 Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = if (settings.keepScreenOn) "Screen stays on during games" else "Normal screen timeout",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange
-        )
     }
 }
+
