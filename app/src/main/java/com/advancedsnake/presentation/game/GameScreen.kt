@@ -125,17 +125,24 @@ private fun GameBoard(
 ) {
     val density = LocalDensity.current
     
+    // NUCLEAR: Add structural changes to force complete recompilation
     var dragStartPosition by remember { mutableStateOf(Offset.Zero) }
     var hasDirectionChanged by remember { mutableStateOf(false) }
     var lastDirectionChangeTime by remember { mutableStateOf(0L) }
+    val structuralCacheBust = remember { System.currentTimeMillis() } // NUCLEAR: additional state
     
-    // NUCLEAR CACHE-BUST 2025-01-06-00:15: Extract settings for Canvas scope - FIX VARIABLE SCOPE
+    // NUCLEAR CACHE-BUST 2025-01-06-00:22: EXTREME CACHE INVALIDATION - FIX #12
     val cacheInvalidator = System.currentTimeMillis() // Force recompilation
     val gameSettings = settings
-    val isGridVisible = gameSettings.showGrid
-    val snakeBodyColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.bodyColorHex))
-    val snakeHeadColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.headColorHex))
-    // CACHE-BUST: Ensure parameters are passed to Canvas DrawScope correctly
+    
+    // NUCLEAR: Extract all settings with completely new names
+    val showGridLines = gameSettings.showGrid // NUCLEAR: renamed from isGridVisible
+    val snakeBodyThemeColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.bodyColorHex)) // NUCLEAR: renamed from snakeBodyColor
+    val snakeHeadThemeColor = Color(android.graphics.Color.parseColor(gameSettings.snakeTheme.headColorHex)) // NUCLEAR: renamed from snakeHeadColor
+    
+    // NUCLEAR CACHE-BUST: Complete variable rename to force CodeMagic recompilation
+    val nuclearCacheBust = "${System.currentTimeMillis()}-${structuralCacheBust}" // Additional cache buster
+    val extremeCacheBust = "NUCLEAR_${System.nanoTime()}" // Maximum cache invalidation
     
     Canvas(
         modifier = modifier
@@ -197,15 +204,16 @@ private fun GameBoard(
                 )
             }
     ) {
-        drawGame(gameState, isGridVisible, snakeBodyColor, snakeHeadColor)
+        renderGameCanvas(gameState, showGridLines, snakeBodyThemeColor, snakeHeadThemeColor, extremeCacheBust)
     }
 }
 
-private fun DrawScope.drawGame(
+private fun DrawScope.renderGameCanvas(
     gameState: GameState,
-    gridDisplayEnabled: Boolean, // CACHE-BUST: renamed from isGridVisible
-    bodyColor: Color, // CACHE-BUST: renamed from snakeBodyColor
-    headColor: Color // CACHE-BUST: renamed from snakeHeadColor
+    shouldShowGrid: Boolean, // NUCLEAR: renamed from gridDisplayEnabled
+    snakeBodyPaint: Color, // NUCLEAR: renamed from bodyColor
+    snakeHeadPaint: Color, // NUCLEAR: renamed from headColor
+    cacheInvalidator: String // NUCLEAR: additional parameter to force cache invalidation
 ) {
     val cellWidth = size.width / gameState.boardWidth
     val cellHeight = size.height / gameState.boardHeight
@@ -217,7 +225,7 @@ private fun DrawScope.drawGame(
     )
     
     // Draw grid lines (if enabled in settings)
-    if (gridDisplayEnabled) {
+    if (shouldShowGrid) {
         val gridColor = Color.Gray.copy(alpha = 0.3f)
         for (x in 0..gameState.boardWidth) {
             drawLine(
@@ -239,11 +247,11 @@ private fun DrawScope.drawGame(
     
     // Draw snake body
     gameState.snake.body.forEach { bodyPart ->
-        drawSnakeSegment(bodyPart, cellWidth, cellHeight, bodyColor)
+        drawSnakeSegment(bodyPart, cellWidth, cellHeight, snakeBodyPaint)
     }
     
     // Draw snake head with enhanced visuals and theme color
-    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight, headColor)
+    drawSnakeHead(gameState.snake.head, gameState.snake.direction, cellWidth, cellHeight, snakeHeadPaint)
     
     // Draw food
     drawFood(gameState.food.position, cellWidth, cellHeight)

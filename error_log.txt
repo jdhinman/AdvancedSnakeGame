@@ -33,8 +33,8 @@ Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/
 > Task :app:generateDebugResources UP-TO-DATE
 > Task :app:packageDebugResources
 > Task :app:createDebugCompatibleScreenManifests
-> Task :app:extractDeepLinksDebug
 > Task :app:mergeDebugResources
+> Task :app:extractDeepLinksDebug
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
@@ -46,21 +46,21 @@ Observed package id 'cmdline-tools;latest' in inconsistent location '/usr/local/
 > Task :app:mergeDebugJniLibFolders
 > Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs NO-SOURCE
-> Task :app:processDebugManifestForPackage
 > Task :app:stripDebugDebugSymbols NO-SOURCE
 > Task :app:mergeLibDexDebug
 > Task :app:validateSigningDebug
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
-> Task :app:mergeExtDexDebug
+> Task :app:processDebugManifestForPackage
 > Task :app:processDebugResources
+> Task :app:mergeExtDexDebug
 > Task :app:kaptGenerateStubsDebugKotlin
 > Task :app:kaptDebugKotlin
 
 > Task :app:compileDebugKotlin FAILED
-e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:212:9 Unresolved reference: isGridVisible
-e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:234:59 Unresolved reference: snakeBodyColor
-e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:238:91 Unresolved reference: snakeHeadColor
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:214:9 Unresolved reference: isGridVisible
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:236:59 Unresolved reference: snakeBodyColor
+e: file:///home/builder/clone/app/src/main/java/com/advancedsnake/presentation/game/GameScreen.kt:240:91 Unresolved reference: snakeHeadColor
 
 [Incubating] Problems report is available at: file:///home/builder/clone/build/reports/problems/problems-report.html
 
@@ -274,7 +274,7 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD FAILED in 1m 48s
+BUILD FAILED in 1m 42s
 28 actionable tasks: 26 executed, 2 up-to-date
 
 
